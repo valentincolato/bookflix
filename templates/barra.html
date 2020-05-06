@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>Barra de navegación horizontal con listas y estilos CSS</title>
+
+<style type="text/css">
+* {
+  padding: 0;
+  margin: 0;
+}
+ 
+/*Agregamos margenes inferiores a los parrafos*/
+p {
+  margin-bottom: 20px;
+}
+.wrapper {
+  width: 80%;
+  margin: auto;
+  overflow:hidden;
+  
+}
+header {
+  background: rgba(255, 0, 0, 0.918);
+  width: 100%;
+  position: fixed;
+  z-index: 10;
+}
+
+nav ul{
+    list-style: none;
+  overflow: hidden; /* Limpiamos errores de float */
+
+}
+nav li{
+    float: left;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+ 
+ 
+ 
+
+}
+nav li a {
+    display: block; /* Convertimos los elementos a en elementos bloque para manipular el padding */
+  padding: 15px;
+  color: #fff;
+  text-decoration: none;
+}
+nav li a:hover{
+    background:darkgray;
+}
+.contenido {
+  padding-top: 80px;
+  
+}
+   </style>
+</head>
+
+<body>
+
+
+    <header>
+        <section class="wrapper">
+            <h1 style="color:white;text-align: center;font-family: Arial, Helvetica, sans-serif;">Bookflix</h1>
+              <nav>
+                
+
+                  <ul>
+                      <li><a href="/home">Home</a></li>
+                      <li><a href="/news">News</a></li>
+                      <li><a href="/contact">Contacto</a></li>
+                      <li><a href="/help">Help</a></li>
+                      
+                  </ul>
+              </nav>
+          </section>
+      </header>
+</body>
+</html> 
