@@ -124,11 +124,14 @@ nav li a:hover{
                       <li><a href="/contact">Contacto</a></li>
                       <li><a href="/help">Help</a></li>
 
+                      {% if user.is_authenticated.not %}
+  
+
 
                       <li><a style="position: absolute;top:0;margin-left:550px;"href="/login">Login</a></li>
                       <li><a  style="position: absolute;top:0;margin-left:620px;" href="/register">Registrarse</a></li>
 
-
+                      {% endif %}
                       
                       
                   </ul>
@@ -137,13 +140,15 @@ nav li a:hover{
               </nav>
               
           </section>
+          {% if user.is_authenticated %}
           <div class="dropdown">
-            <button class="dropbtn">Menu</button>
+            <button style="font-size: large;"class="dropbtn">{{request.user.username}}</button>
             <div class="dropdown-content">
               <a href="/logout">Logout</a>
               <a href="/profile">Profile</a>
             </div>
           </div> 
+          {% endif %}
       </header>
 </body>
 </html> 
