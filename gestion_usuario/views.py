@@ -13,10 +13,10 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Create your views here.
-@login_required(login_url="/login")
+# @login_required(login_url="/login")
 def home(request):
     #return render(request,os.path.join(BASE_DIR,'templates','test.html'),{"noticias":[]})
-    return render(request,'home.html',{"hola":1})
+    return render(request,'home.html')
 
 
 #Para los usuarios no logueados
@@ -42,7 +42,7 @@ def register(request):
 
             if user is not None:
                 do_login(request,user)
-                return redirect('/home')
+                return redirect('/')
     
     form.fields['username'].help_text = None
     form.fields['password1'].help_text = None
@@ -59,7 +59,7 @@ def login(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             do_login(request, user)
-            return redirect('/home')
+            return redirect('/')
     return render(request, "gestion_usuario/login.html",{'form':form})
 
 def logout(request):
