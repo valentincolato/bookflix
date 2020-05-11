@@ -1,0 +1,20 @@
+{% extends "padre.html" %}
+{% block title %}
+EDIT PROFILE || {{block.super}}
+{% endblock %}
+
+
+
+{% block content %}
+
+<section class="contenido wrapper">
+<form action ="." method="post" enctype="multipart/form-data">
+    
+    {% csrf_token %}
+    {{user_form.as_p}}
+    {{profile_form.as_p}}
+    <button type="submit">Guardar cambios</button>
+ 
+</form>
+</section>
+{% endblock %}

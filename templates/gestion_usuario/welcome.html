@@ -1,0 +1,16 @@
+{% extends "padre.html" %}
+
+{% block content %}
+
+<section class="contenido wrapper">
+
+
+<h2>Area para miembros</h2>
+
+<p>Bienvenido <b>{{request.user.username}}</b></p>
+<!--
+<a href="/home">IR A HOME</a>
+<a href="/logout">CERRAR SESION</a>-->
+
+</section>
+{% endblock %}
