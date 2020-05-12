@@ -1,0 +1,40 @@
+{% extends "padre.html" %}
+
+
+{% block title %}
+news
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<section class="contenido wrapper">
+    <h1>{{libro.titulo}}</h1>
+	<br/>
+	<p> ISBN: {{libro.ISBN}}</p>
+	<br/>
+	<p> Autor: {{libro.autor.nombre}}</p>
+	<br/>
+	<p> Cantidad de capitulos: {{libro.cant_capitulos}}</p>
+	<br/>
+	<p>Cantidad de paginas: {{libro.cant_paginas}}</p>
+	<br/>
+	<p> Genero: </p>
+	   <ul>
+	{% for  genero in libro.genero.all%}
+
+            <li>{{genero.nombre}}</li>
+
+    {% endfor %}
+    </ul>
+	<br/>
+	<p> Editorial: {{libro.editorial.nombre}}</p>
+	
+  </section>
+  
+  
+
+{% endblock %}
+

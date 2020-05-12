@@ -11,6 +11,9 @@ Home
 
 
 <section class="contenido wrapper">
+	 {% if user.is_authenticated %}
+	 <p>Bienvenido <b>{{request.user.username}}</b></p>
+	 {%endif%}
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus 
   adipiscing commodo aliquet. Fusce bibendum orci magna, a pellentesque 
   augue posuere sed. Ut bibendum magna tincidunt velit fermentum, eu 
@@ -85,27 +88,6 @@ Home
   at quam mollis tristique eu non justo. Donec imperdiet nisl non faucibus
    bibendum. Suspendisse potenti.</p>
   
-    <p>Vestibulum tempor tristique dignissim. Ut fermentum porttitor 
-  massa, non dictum risus. Proin aliquam, metus non pretium vehicula, 
-  ipsum ligula placerat est, ut pharetra ipsum sapien et nisi. Aliquam 
-  condimentum neque vitae felis elementum fringilla quis eu ante. Aenean 
-  dictum sem orci, commodo elementum urna fringilla sit amet. Integer dui 
-  elit, consectetur eget ante quis, eleifend egestas tellus. Suspendisse 
-  venenatis urna non turpis volutpat, eget vehicula ipsum ultricies. Fusce
-   at rutrum nulla, id vulputate mi. Nunc cursus risus a sapien rutrum, eu
-   dapibus nunc elementum. Sed id tincidunt tortor. Donec ipsum nulla, 
-  aliquet eu erat eu, sodales luctus lorem.</p>
-  
-    <p>Nullam ut sem lectus. Fusce accumsan vestibulum est porttitor 
-  egestas. Curabitur ac ultricies quam. Integer elementum tellus vitae 
-  nisl luctus, fringilla luctus metus congue. Duis nec diam posuere, 
-  pellentesque urna nec, rhoncus ligula. Vivamus pulvinar id nulla eget 
-  sodales. Nunc iaculis nibh massa, sed aliquam diam ornare vel. 
-  Suspendisse potenti. Integer nec ante turpis. Vivamus eleifend diam et 
-  porttitor pharetra. Vivamus tempus pretium elit, sit amet molestie diam.
-   Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce 
-  viverra posuere porta. Maecenas ut blandit massa, ut ultrices purus. Sed
-   at porttitor urna. </p>
     
   </section>
   

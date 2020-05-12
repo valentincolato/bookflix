@@ -11,15 +11,11 @@ news
 
 
 <section class="contenido wrapper">
-    <h1>Noticias</h1>
+    <h1>{{noticia.titulo}}</h1>
 	<br/>
-    <ul>
-	{% for  noticia in noticias%}
-
-            <li><a href="{{noticia.id}}">{{noticia}}</a></li>
-
-    {% endfor %}
-    </ul>
+	<p>{{noticia.cuerpo}}</p>
+	<br/>
+	<a href="/news">Volver</a>
   </section>
   
   

@@ -12,42 +12,58 @@ from django.dispatch import receiver
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)
-    fecha_nacimiento= models.DateField(null=True, blank =True)
-    foto_perfil = models.ImageField(null=True, blank=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+	fecha_nacimiento= models.DateField(null=True, blank =True)
+	nickname=models.CharField(max_length=50,null=True, blank=True)
+	soyPrincipal=models.BooleanField(default=True)
+	# foto_perfil = models.ImageField(null=True, blank=True)
+	def __str__(self):		
+		 return '%s : %s' % (self.nickname, self.user)
 
 
-class Usuario(models.Model):
-    nombre = models.CharField(max_length=50,)
-    apellido = models.CharField(max_length=50)
-    correo_electronico=models.EmailField()
-    contrasenia=models.CharField(max_length=50)
-    profile=models.ForeignKey(Profile, on_delete=models.SET_NULL,null=True,blank=True)
-    #Los libros_favoritos se obtienen con un query
-    tarjeta=models.ForeignKey(Tarjeta, on_delete=models.SET_NULL,null=True,blank=True)
-    #El historial se obtienen con un query
-    def __str__(self):        
-         return '%s %s' % (self.nombre, self.apellido)
+# class Usuario(models.Model):
+	# nombre = models.CharField(max_length=50,)
+	# apellido = models.CharField(max_length=50)
+	# correo_electronico=models.EmailField()
+	# contrasenia=models.CharField(max_length=50)
+	# profile=models.ForeignKey(Profile, on_delete=models.SET_NULL,null=True,blank=True)
+	# #Los libros_favoritos se obtienen con un query
+	# tarjeta=models.ForeignKey(Tarjeta, on_delete=models.SET_NULL,null=True,blank=True)
+	# #El historial se obtienen con un query
+	# def __str__(self):		
+		 # return '%s %s' % (self.nombre, self.apellido)
 
-class Perfil(models.Model):
-    nickname=models.CharField(max_length=50)
-    usuario=models.ForeignKey(Usuario, on_delete=models.CASCADE)    
+# class Perfil(models.Model):
+	# nickname=models.CharField(max_length=50)
+	# usuario=models.ForeignKey(Usuario, on_delete=models.CASCADE)	
 
 class Historial(models.Model):
-    libro=models.ForeignKey(Libro, on_delete=models.CASCADE)
-    pagina=models.IntegerField()
-    perfil=models.ForeignKey(Perfil, on_delete=models.CASCADE)
+	libro=models.ForeignKey(Libro, on_delete=models.CASCADE)
+	pagina=models.PositiveIntegerField()
+	perfil=models.ForeignKey(Profile, on_delete=models.CASCADE)
+	fecha=models.DateField(auto_now=True)
+	def __str__(self):		
+		 return 'de %s' % (self.perfil)
 
 class Favorito(models.Model):
-    libro=models.ForeignKey(Libro, on_delete=models.CASCADE)
-    pagina=models.IntegerField()
-    perfil=models.ForeignKey(Perfil, on_delete=models.CASCADE)
+	libro=models.ForeignKey(Libro, on_delete=models.CASCADE)
+	perfil=models.ForeignKey(Profile, on_delete=models.CASCADE)
+	fecha=models.DateField(auto_now=True)
+	def __str__(self):		
+		 return '%s de %s' % (self.libro, self.perfil)
 
 
 class Comentario(models.Model):
-    usuario=models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    texto= models.CharField(max_length=50)
-    libro=models.ForeignKey(Libro, on_delete=models.CASCADE)
+	perfil=models.ForeignKey(Profile, on_delete=models.CASCADE,null=True)
+	texto= models.TextField()
+	libro=models.ForeignKey(Libro, on_delete=models.CASCADE)
+	fecha=models.DateField(auto_now=True)
+	def __str__(self):		
+		 return '%s de %s' % (self.libro, self.perfil)
 
-
+class Puntaje(models.Model):
+	perfil=models.ForeignKey(Profile, on_delete=models.CASCADE,null=True)
+	libro=models.ForeignKey(Libro, on_delete=models.CASCADE)
+	fecha=models.DateField(auto_now=True)
+	estrellas=models.PositiveIntegerField()
 
