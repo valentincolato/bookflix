@@ -119,17 +119,17 @@ nav li a:hover{
                 
 
                   <ul>
-                      <li><a href="/home">Home</a></li>
+                      <li><a href="/">Home</a></li>
                       <li><a href="/news">News</a></li>
                       <li><a href="/contact">Contacto</a></li>
                       <li><a href="/help">Help</a></li>
 
-                      {% if user.is_authenticated.not %}
+                      {% if not user.is_authenticated %}
   
 
 
-                      <li><a style="position: absolute;top:0;margin-left:550px;"href="/login">Login</a></li>
-                      <li><a  style="position: absolute;top:0;margin-left:620px;" href="/register">Registrarse</a></li>
+					<li><a style="position: absolute;top:0;margin-left:550px;"href="/login">Login</a></li>
+					<li><a  style="position: absolute;top:0;margin-left:620px;" href="/register">Registrarse</a></li>
 
                       {% endif %}
                       
