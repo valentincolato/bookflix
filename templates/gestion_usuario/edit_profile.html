@@ -8,13 +8,28 @@ EDIT PROFILE || {{block.super}}
 {% block content %}
 
 <section class="contenido wrapper">
+    <h2>Editando perfil</h2>
+        
 <form action ="." method="post" enctype="multipart/form-data">
-    
+   
     {% csrf_token %}
     {{user_form.as_p}}
     {{profile_form.as_p}}
-    <button type="submit">Guardar cambios</button>
+
+    {%  if not soyValido  %}
+        <p><strong>Datos ingresados no correctos</strong></p>
+
+    {% endif %}
+  
+
+    <button type="submit" >Guardar cambios</button>
+    <button type="reset" onclick="window.location.href = '/profile';">Volver</button>
  
 </form>
+
+
+
+
+<p><p>
 </section>
 {% endblock %}

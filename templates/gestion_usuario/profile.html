@@ -7,12 +7,17 @@
 
 
 
-<h1>Perfil</h1>
+<h1>Perfil: {{nickname}}</h1>
 <p>Username: {{request.user.username }}</p>
 <p>Nombre: {{request.user.first_name }}</p>
 <p>Apellido: {{request.user.last_name }}</p>
 <p>Email: {{request.user.email }}</p>
-<p>Fnac: {{request.profile.foto_perfil }}</p>
+{% if not fecha_nacimiento == None %}
+    <p>Fecha nacimiento: {{fecha_nacimiento}}</p>
+
+
+{% endif %}
+
 
 {% if profile.foto_perfil %}
 <img src="{{request.profile.foto_perfil}}" width="240">
