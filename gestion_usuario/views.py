@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from .models import Profile
 from django.shortcuts import get_object_or_404
 import os
+from django.core.exceptions import ObjectDoesNotExist
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,7 +36,7 @@ def register(request):
         form = UserCreationFormExtends(data=request.POST)
         if form.is_valid():
             user=form.save()
-            prf=Profile(user=user)
+            prf=Profile(user=user,nickname=user.username)
             prf.save()
 
             
@@ -68,18 +69,22 @@ def logout(request):
 
 @login_required
 def edit_profile(request):
-    instance_profile= Profile.objects.get(user=request.user)
     
-    if instance_profile == None:
-        Profile(user=request.user).save()
+    instance_profile= Profile.objects.get(user=request.user)
+    valido=True
+  
 
 
     if request.method == "POST":
        
         user_form= UserEditForm(data=request.POST or None, instance= request.user)
         profile_form = ProfileEditForm(data=request.POST or None, instance=instance_profile, files=request.FILES)
-        user_form.save()
-        profile_form.save()
+        
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+        else:
+            valido=False
     else:
         user_form= UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance= instance_profile)
@@ -88,11 +93,25 @@ def edit_profile(request):
     context ={
 
         'user_form':user_form,
-        'profile_form':profile_form
+        'profile_form':profile_form,
+        'soyValido':valido
     }
     return render(request, "gestion_usuario/edit_profile.html",context)
 
 @login_required
 def profile(request):
+    try:
+        instance_profile= Profile.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+       instance_profile=  Profile(user=request.user,nickname=request.user.username)
+       instance_profile.save()
+
+    context={ 
+        "fecha_nacimiento":instance_profile.fecha_nacimiento,
+        "nickname":instance_profile.nickname,
+        "soyPrincipal":instance_profile.soyPrincipal
+    }
     
-     return render(request, "gestion_usuario/profile.html")
+    return render(request, "gestion_usuario/profile.html",context)
+
+

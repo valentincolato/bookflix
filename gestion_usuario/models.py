@@ -14,7 +14,7 @@ from django.dispatch import receiver
 class Profile(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
 	fecha_nacimiento= models.DateField(null=True, blank =True)
-	nickname=models.CharField(max_length=50,null=True, blank=True)
+	nickname=models.CharField(blank=False,max_length=50,null=True,)
 	soyPrincipal=models.BooleanField(default=True)
 	# foto_perfil = models.ImageField(null=True, blank=True)
 	def __str__(self):		
