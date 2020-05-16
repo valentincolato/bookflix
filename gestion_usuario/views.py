@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 import os
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View
-from gestion_noticia.views import noticias
+from gestion_noticia.views import noticias,ultimas_noticias
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # @login_required(login_url="/login")
 def home(request):
     #return render(request,os.path.join(BASE_DIR,'templates','test.html'),{"noticias":[]})
-    context={"estoy_en_home":True, "noticias":noticias()[0:3]}
+    context={"estoy_en_home":True, "noticias":ultimas_noticias(3)}
     return render(request,'home.html',context)
 
 

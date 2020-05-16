@@ -13,5 +13,10 @@ def news_especifica(request,newsId):
 	return render(request, "newsEspecifica.html",contexto)
 
 def noticias():
-	return Noticia.objects.all()
+	n=Noticia.objects.all().order_by('-fecha_de_creacion')
 
+	return n
+
+def ultimas_noticias(n):
+	noticias=Noticia.objects.order_by('-fecha_de_creacion')[0:n]
+	return noticias
