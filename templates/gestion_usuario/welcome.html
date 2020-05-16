@@ -1,0 +1,33 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+
+{% block title %}
+Perfil
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<body id="page-top">
+
+<section id="perfil" class="about-mf sect-pt4 route">
+    
+    <div class="box-shadow-full">
+      <div class="row">
+        <div class="col-sm-12">
+
+
+        <h2>Area para miembros</h2>
+
+        <p>Bienvenido <b>{{request.user.username}}</b></p>
+        <!--
+        <a href="/home">IR A HOME</a>
+        <a href="/logout">CERRAR SESION</a>-->
+
+
+{% endblock %}
+</section>

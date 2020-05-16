@@ -1,0 +1,42 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+
+{% block title %}
+Perfil
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<body id="page-top">
+
+<section id="perfil" class="about-mf sect-pt4 route">
+    <div class="box-shadow-full">
+      <div class="row">
+        <div class="col-sm-12">
+        <h2>Datos de perfil</h2>
+        <form action ="." method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{profile_form.as_p}}
+            <hr>
+            <h2>Datos de cuenta</h2>
+            {{user_form.as_p}}
+            {%  if not soyValido  %}
+                <p><strong>Datos ingresados no correctos</strong></p>
+
+            {% endif %}
+
+            <button type="submit" >Guardar cambios</button>
+            <button type="reset" onclick="window.location.href = '/profile';">Volver</button>
+        
+        </form>
+
+
+
+
+</section>
+{% endblock %}

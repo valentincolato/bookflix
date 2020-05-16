@@ -1,0 +1,20 @@
+{% extends "padre.html" %}
+
+
+{% block title %}
+Cambiar perfil
+{% endblock %}
+
+
+
+{% block content %}
+<section class="contenido wrapper">
+<h2>Cambiar perfil</h2>
+
+    {% for perfil in perfiles %}
+            <a href="/profile">
+            <p><strong>{{perfil.nickname}}</strong></p></a>
+
+    {% endfor %}
+</section>
+{% endblock %}
