@@ -19,8 +19,8 @@ Help
     <div class="box-shadow-full">
       <div class="row">
         <div class="col-sm-12">
-			<h1>Libro</h1>
-		<h1>{{libro.titulo}}</h1>
+			
+		<h1>{{libro.nombre}}</h1>
 		<br/>
 		<p> ISBN: {{libro.ISBN}}</p>
 		<br/>
@@ -40,6 +40,10 @@ Help
 		</ul>
 		<br/>
 		<p> Editorial: {{libro.editorial.nombre}}</p>
+		
+		<a href=/fav/{{libro.id}}>{%if favorito%}Sacar{%else%}Marcar{%endif%} como favorito</a>
+		
+		
 	
   </section>
   
