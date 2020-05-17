@@ -14,15 +14,15 @@ News
 
 <body id="page-top">
   <section id="perfil" class="about-mf sect-pt4 route">
-      <div class="box-shadow-full">
-        <div class="row">
-          <div class="col-sm-12">
+    <div class="box-shadow-full">
+      <div class="row">
+        <div class="col-sm-12">
           <h1>Noticias</h1>
-          <br/>
+          <br />
           <ul>
-          {% for  noticia in noticias%}
-                  <li><a href="{{noticia.id}}">{{noticia}}</a></li>
-          {% endfor %}
+            {% for  noticia in noticias%}
+            <li><a href="{{noticia.id}}">{{noticia}}</a></li>
+            {% endfor %}
           </ul>
   </section>
-{% endblock %}
+  {% endblock %}
