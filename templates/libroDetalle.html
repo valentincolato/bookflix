@@ -14,40 +14,39 @@ Help
 
 <body id="page-top">
 
-<section id="perfil" class="about-mf sect-pt4 route">
-    
-    <div class="box-shadow-full">
-      <div class="row">
-        <div class="col-sm-12">
-			
-		<h1>{{libro.nombre}}</h1>
-		<br/>
-		<p> ISBN: {{libro.ISBN}}</p>
-		<br/>
-		<p> Autor: {{libro.autor.nombre}}</p>
-		<br/>
-		<p> Cantidad de capitulos: {{libro.cant_capitulos}}</p>
-		<br/>
-		<p>Cantidad de paginas: {{libro.cant_paginas}}</p>
-		<br/>
-		<p> Genero: </p>
-		<ul>
-		{% for  genero in libro.genero.all%}
+	<section id="perfil" class="about-mf sect-pt4 route">
 
-				<li style="color: black;">{{genero.nombre}}</li>
+		<div class="box-shadow-full">
+			<div class="row">
+				<div class="col-sm-12">
 
-		{% endfor %}
-		</ul>
-		<br/>
-		<p> Editorial: {{libro.editorial.nombre}}</p>
-		
-		<a href=/fav/{{libro.id}}>{%if favorito%}Sacar{%else%}Marcar{%endif%} como favorito</a>
-		
-		
-	
-  </section>
-  
-  
+					<h1>{{libro.nombre}}</h1>
+					<br />
+					<p> ISBN: {{libro.ISBN}}</p>
+					<br />
+					<p> Autor: {{libro.autor.nombre}}</p>
+					<br />
+					<p> Cantidad de capitulos: {{libro.cant_capitulos}}</p>
+					<br />
+					<p>Cantidad de paginas: {{libro.cant_paginas}}</p>
+					<br />
+					<p> Genero: </p>
+					<ul>
+						{% for  genero in libro.genero.all%}
 
-{% endblock %}
+						<li style="color: black;">{{genero.nombre}}</li>
 
+						{% endfor %}
+					</ul>
+					<br />
+					<p> Editorial: {{libro.editorial.nombre}}</p>
+
+					<a href=/fav/{{libro.id}}>{%if favorito%}Sacar{%else%}Marcar{%endif%} como favorito</a>
+
+
+
+	</section>
+
+
+
+	{% endblock %}
