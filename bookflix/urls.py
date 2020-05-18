@@ -38,3 +38,5 @@ urlpatterns = [
 
 ]
 urlpatterns+= staticfiles_urlpatterns()
+# Añadir
+admin.site.site_header = 'Administracion Bookflix'
