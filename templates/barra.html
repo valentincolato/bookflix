@@ -41,13 +41,8 @@
             {% else %}
             <ul class="nav navbar-nav ml-auto">
               <li class="nav-item dropdown">
-                {% if not request.session.nickname %}
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{request.user.username}}</a>
-                {% else %}
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{request.session.nickname}}</a>
-                {% endif %}
-
-                  
+                
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{request.session.nickname}}</a>  
                   <div class="dropdown-menu dropdown-menu-right">
                       <a href="/profile" class="dropdown-item">Ver perfil</a>
                       <a href="/change_profile" class="dropdown-item">Cambiar perfil</a>
