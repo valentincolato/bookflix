@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,re_path
 from gestion_usuario.views import home,welcome,register,login,logout,edit_profile,profile,index
 from gestion_noticia.views import news,news_especifica
-from gestion_libro.views import libro_especifico,libro_fav
+from gestion_libro.views import libro_especifico,libro_fav,libros
 from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
@@ -33,6 +33,7 @@ urlpatterns = [
     path('news/', news),
 	path('news/<newsId>', news_especifica),
     path('libro/<libroId>', libro_especifico),
+    path('home/', libros),
 	path('fav/<libroId>', libro_fav),
     path('index', index),
 

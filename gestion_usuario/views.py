@@ -20,8 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def home(request):
-    context = {"estoy_en_home": True, "noticias": ultimas_noticias(3)}
-    return render(request, 'home.html', context)
+    if request.user.is_authenticated:
+        return redirect('home/')
+
+    context = {"estoy_en_home": True, "noticias": ultimas_noticias(3)}    
+    return render(request, "home.html", context)
 
 
 # Para los usuarios no logueados

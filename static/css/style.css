@@ -1,4 +1,4 @@
-/*
+*
   Theme Name: DevFolio
   Theme URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
   Author: BootstrapMade.com
@@ -939,6 +939,192 @@ a:hover {
   .box-comments .list-comments .comment-author {
     font-size: 1.5rem;
   }
+
+/* ---- ----- ----- Pelicula Principal ----- ----- ----- */
+.libro-principal {
+	font-size: 16px;
+	min-height: 40.62em;
+	color: #fff;
+	background: linear-gradient(rgba(0, 0, 0, .50) 0%, rgba(0,0,0,.50) 100%), url(/static/foto_libro/borges.jpg);
+	background-position: center center;
+	background-size: cover;
+	margin-bottom: 3.12em;
+	display: flex;
+	align-items: end;
+}
+
+.libro-principal .contenedor {
+	margin: 0 auto;
+	margin-bottom: 6.25em;
+}
+
+.libro-principal .titulo {
+	font-weight: 600;
+	font-size: 3.12em;
+	margin-bottom: 0.4em;
+}
+
+.libro-principal .descripcion {
+	font-weight: normal;
+	font-size: 1em;
+	line-height: 1.75em;
+	max-width: 50%;
+	margin-bottom: 1.25em;
+}
+
+.libro-principal .boton {
+	background: rgba(0,0,0, 0.5);
+	border: none;
+	border-radius: 0.31em;
+	padding: 0.93em 1.87em;
+	color: #fff;
+	margin-right: 1.25em;
+	cursor: pointer;
+	transition: .3s ease all;
+	font-size: 1.12em;
+}
+
+.libro-principal .boton:hover {
+	background: #fff;
+	color: #000;
+}
+
+.libro-principal .boton i {
+	margin-right: 1.25em;
+}
+
+/* ---- ----- ----- Contenedor Titulo y Controles ----- ----- ----- */
+.contenedor-titulo-controles {
+	display: flex;
+	justify-content: space-between;
+	align-items: end;
+}
+
+.contenedor-titulo-controles h3 {
+	color: #fff;
+	font-size: 30px;
+}
+
+.contenedor-titulo-controles .indicadores button {
+	background: #fff;
+	height: 3px;
+	width: 10px;
+	cursor: pointer;
+	border: none;
+	margin-right: 2px;
+}
+
+.contenedor-titulo-controles .indicadores button:hover,
+.contenedor-titulo-controles .indicadores button.activo {
+	background: red;
+}
+
+
+/* ---- ----- ----- Contenedor Principal y Flechas ----- ----- ----- */
+.libros-recomendados {
+	margin-bottom: 70px;
+}
+
+.libros-recomendados .contenedor-principal {
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+
+.libros-recomendados .contenedor-principal .flecha-izquierda,
+.libros-recomendados .contenedor-principal .flecha-derecha {
+	position: absolute;
+	border: none;
+	background: rgba(0,0,0,0.3);
+	font-size: 40px;
+	height: 50%;
+	top: calc(50% - 25%);
+	line-height: 40px;
+	width: 50px;
+	color: #fff;
+	cursor: pointer;
+	z-index: 500;
+	transition: .2s ease all;
+}
+
+.libros-recomendados .contenedor-principal .flecha-izquierda:hover,
+.libros-recomendados .contenedor-principal .flecha-derecha:hover {
+	background: rgba(0,0,0, .9);
+}
+
+.libros-recomendados .contenedor-principal .flecha-izquierda {
+	left: 0;
+}
+
+.libros-recomendados .contenedor-principal .flecha-derecha {
+	right: 0;
+}
+
+/* ---- ----- ----- Carousel ----- ----- ----- */
+.libros-recomendados .contenedor-carousel {
+	width: 100%;
+	padding: 20px 0;
+	overflow: hidden;
+	scroll-behavior: smooth;
+}
+
+.libros-recomendados .contenedor-carousel .carousel {
+	display: flex;
+	flex-wrap: nowrap;
+}
+
+.libros-recomendados .contenedor-carousel .carousel .libro {
+	min-width: 20%;
+	transition: .3s ease all;
+	box-shadow: 5px 5px 10px rgba(0,0,0, .3);
+}
+
+.libros-recomendados .contenedor-carousel .carousel .libro.hover {
+	transform: scale(1.2);
+	transform-origin: center;
+}
+
+.libros-recomendados .contenedor-carousel .carousel .libro img {
+	width: 100%;
+	vertical-align: top;
+}
+
+/* ---- ----- ----- Media Queries ----- ----- ----- */
+@media screen and (max-width: 800px) {
+	header .logotipo {
+		margin-bottom: 10px;
+		font-size: 30px;
+	}
+
+	header .contenedor {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.libro-principal {
+		font-size: 14px;
+	}
+
+	.libro-principal .descripcion {
+		max-width: 100%;
+	}
+
+	.libros-recomendados .contenedor-carousel {
+		overflow: visible;
+	}
+
+	.libros-recomendados .contenedor-carousel .carousel {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+	}
+
+	.libros-recomendados .indicadores,
+	.libros-recomendados .flecha-izquierda,
+	.libros-recomendados .flecha-derecha {
+		display: none;
+	}
+}
 }
 
 @media (min-width: 992px) {
