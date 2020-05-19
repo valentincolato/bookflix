@@ -181,7 +181,6 @@ def register_profile(request):
             profile = form.save()
             profile.user=request.user
             profile.save()
-            print('perfil:',profile)
             return redirect('/')
            
 
