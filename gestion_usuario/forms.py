@@ -34,3 +34,18 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = ('user', 'soyPrincipal')
+
+class ProfileCreateForm(forms.ModelForm):
+    fecha_nacimiento = forms.DateField(required=False)
+    foto =forms.ImageField(required=False)
+    nickname =forms.CharField(required=True)
+
+    
+    class Meta:
+        model = Profile
+        fields = [
+            "fecha_nacimiento","nickname","foto"
+        ]
+        exclude = ('user', 'soyPrincipal')
+
+        

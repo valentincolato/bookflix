@@ -1,0 +1,36 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+
+{% block title %}
+Perfil
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<body id="page-top">
+
+<section id="perfil" class="about-mf sect-pt4 route">
+    
+    <div class="box-shadow-full">
+      <div class="row">
+        <div class="col-sm-12">
+        <h2>Registrar perfil</h2>
+        
+        <form method="POST">
+            {% csrf_token %} 
+            
+            {{ form.as_p }}
+            
+            <button type="submit">Registrar</button>
+        </form>
+
+    
+
+
+</section>
+{% endblock %}

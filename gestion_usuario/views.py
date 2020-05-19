@@ -3,7 +3,7 @@ from django.contrib.auth import logout as do_logout, authenticate
 from django.contrib.auth import login as do_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .forms import UserCreationFormExtends, UserEditForm, ProfileEditForm
+from .forms import UserCreationFormExtends, UserEditForm, ProfileEditForm,ProfileCreateForm
 from django.contrib.auth.models import User
 from .models import Profile
 from django.shortcuts import get_object_or_404
@@ -73,10 +73,12 @@ def create_session(request):
     perfil_primario = Profile.objects.get(user=request.user, soyPrincipal=True)
     request.session['perfil'] = perfil_primario.id
     request.session['usuario'] = perfil_primario.user.id
-
+    request.session['nickname']= (Profile.objects.get(id=perfil_primario.id)).nickname
 
 def change_session_profile(request,id):
     request.session['perfil'] = id
+    request.session['nickname']= (Profile.objects.get(id=id)).nickname
+    return redirect('/')
 
 
 def profile_session(request):
@@ -111,7 +113,7 @@ def logout(request):
 @login_required
 def edit_profile(request):
 
-    instance_profile = Profile.objects.get(user=request.user)
+    instance_profile = profile_session(request)
     valido = True
 
     if request.method == "POST":
@@ -140,7 +142,7 @@ def edit_profile(request):
 @login_required
 def profile(request):
     try:
-        instance_profile = Profile.objects.get(user=request.user)
+        instance_profile = profile_session(request)
     except ObjectDoesNotExist:
         instance_profile = Profile(
             user=request.user, nickname=request.user.username)
@@ -149,11 +151,45 @@ def profile(request):
     context = {
         "fecha_nacimiento": instance_profile.fecha_nacimiento,
         "nickname": instance_profile.nickname,
-        "soyPrincipal": instance_profile.soyPrincipal
+        "soyPrincipal": instance_profile.soyPrincipal,
+        "foto_perfil":(str(instance_profile.foto).split('static'))[1]
     }
     return render(request, "gestion_usuario/profile.html", context)
 
 
+
+def fotos_perfiles(id):
+    perfiles=Profile.objects.filter(user=id)
+    fotos_perfiles= list(map(lambda perfil: (perfil.id, ((str(perfil.foto)).split('static/'))[1] ), perfiles))
+    fotos_dict={}
+    for foto_perfil in fotos_perfiles:
+        fotos_dict[foto_perfil[0]]= foto_perfil[1]
+    return fotos_dict
+
+@login_required
+def change_profile_view(request):
+    perfiles=Profile.objects.filter(user=request.user)
+    context={"estoy_en_home":True,"perfiles":perfiles,"fotos_perfiles":fotos_perfiles(request.user.id)}
+    return render(request, "gestion_usuario/change_profile.html",context)
+
+@login_required
+def register_profile(request):
+    form = ProfileCreateForm(request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            profile = form.save()
+            profile.user=request.user
+            profile.save()
+            print('perfil:',profile)
+            return redirect('/')
+           
+
+    return render(request, "gestion_usuario/register_profile.html", {'form': form})
+
+
 def index(request):
     return render(request, "index.html")
+
+
 

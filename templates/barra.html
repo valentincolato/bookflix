@@ -1,9 +1,15 @@
 {% load static %}
+{# Cargamos la librería #}
+{% load bootstrap4 %}
+
+{# CSS Bootstrap #}
+{% bootstrap_css %}
+
 <header>
 
   <body id="page-top">
     <!--/ Nav Star /-->
-    <nav class="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
+    <nav class="navbar-expand-md  navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
       <div class="container">
         <a class="navbar-brand js-scroll" href="/">Bookflix</a>
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
@@ -20,11 +26,12 @@
             <li class="nav-item">
               <a class="nav-link js-scroll" href="/news">Noticias</a>
             </li>
+           
+           
+            {% if not user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link js-scroll" href="/#contact">Sobre nosotros</a>
             </li>
-           
-            {% if not user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link js-scroll" href="/login">login</a>
             </li>
@@ -32,16 +39,32 @@
               <a class="nav-link js-scroll" href="/register">Registrarse</a>
             </li>
             {% else %}
-            <li class="nav-item">
-              <a class="nav-link js-scroll" href="/profile">Perfil</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll" href="/logout">Cerrar Sesion</a>
-            </li>
+            <ul class="nav navbar-nav ml-auto">
+              <li class="nav-item dropdown">
+                  <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{request.session.nickname}}</a>
+                  <div class="dropdown-menu dropdown-menu-right">
+                      <a href="/profile" class="dropdown-item">Ver perfil</a>
+                      <a href="/change_profile" class="dropdown-item">Cambiar perfil</a>
+                      <a href="/register_profile" class="dropdown-item">Agregar perfil</a>
+                      <div class="dropdown-divider"></div>
+                      <a href="/logout"class="dropdown-item">Logout</a>
+                  </div>
+              </li>
+          </ul>  
             {% endif %}
-          </ul>
+             
+          
+    </div>
+</nav>
         </div>
-      </div>
-    </nav>
+        
     <!--/ Nav End /-->
+    <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/bootstrap.js' %}" type="text/javascript"></script>
+    {# JS y jQuery Bootstrap #}
+{% bootstrap_javascript jquery='full' %}
+{% block scripts %}
+{% endblock %}
+
 </header>
+
