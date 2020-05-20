@@ -181,7 +181,7 @@ def register_profile(request):
             profile = form.save()
             profile.user=request.user
             profile.save()
-            return redirect('/')
+            return redirect('/change_profile/',profile.id)
            
 
     return render(request, "gestion_usuario/register_profile.html", {'form': form})
