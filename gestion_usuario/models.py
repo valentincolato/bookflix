@@ -1,6 +1,6 @@
 from django.db import models
 #from bookflix.gestion_pago.models import Tarjeta
-
+import random
 from gestion_pago.models import Tarjeta
 
 # from ..\gestion_pago.models import Tarjeta

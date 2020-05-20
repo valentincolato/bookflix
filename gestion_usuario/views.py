@@ -7,7 +7,7 @@ from .forms import UserCreationFormExtends, UserEditForm, ProfileEditForm,Profil
 from django.contrib.auth.models import User
 from .models import Profile
 from django.shortcuts import get_object_or_404
-import os
+import os,random
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View
 from gestion_noticia.views import noticias, ultimas_noticias
@@ -124,6 +124,7 @@ def edit_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            return redirect('/profile')
            
 
         else:
@@ -174,6 +175,9 @@ def change_profile_view(request):
     context={"estoy_en_home":True,"perfiles":perfiles,"fotos_perfiles":fotos_perfiles(request.user.id)}
     return render(request, "gestion_usuario/change_profile.html",context)
 
+def foto_perfil_random():
+    return str(random.randrange(1,6)) 
+
 @login_required
 def register_profile(request):
     form = ProfileCreateForm(request.POST or None)
@@ -182,6 +186,9 @@ def register_profile(request):
         if form.is_valid():
             profile = form.save()
             profile.user=request.user
+            if profile.foto=='static/foto_perfil/default.jpg':
+                profile.foto ='static/foto_perfil/'+foto_perfil_random()+'.jpg'
+
             profile.save()
             return redirect('/change_profile/',profile.id)
            

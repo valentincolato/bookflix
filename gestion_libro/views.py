@@ -57,6 +57,7 @@ def libro_fav(request, libroId):
 @login_required
 def libros(request):
     
+
     context = {"libros":Libro.objects.all(),"estoy_en_home":True,"fotos_libros":fotos_libros()}
     
     return render(request, "libros.html", context)
