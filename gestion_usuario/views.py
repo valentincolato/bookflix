@@ -33,7 +33,8 @@ def welcome(request):
         return render(request, "gestion_usuario/welcome.html")
     return redirect('/login')
 
-
+def foto_perfil_random():
+    return str(random.randrange(1,6)) 
 def register(request):
     form = UserCreationFormExtends()
 
@@ -42,9 +43,11 @@ def register(request):
         if form.is_valid():
             user = form.save()
             prf = Profile(user=user, nickname=user.username, soyPrincipal=True)
+            prf.foto ='static/foto_perfil/'+foto_perfil_random()+'.jpg'
             prf.save()
             if user is not None:
                 do_login(request, user)
+                create_session(request)
                 return redirect('/')
     form.fields['username'].help_text = None
     form.fields['password1'].help_text = None
@@ -175,8 +178,7 @@ def change_profile_view(request):
     context={"estoy_en_home":True,"perfiles":perfiles,"fotos_perfiles":fotos_perfiles(request.user.id)}
     return render(request, "gestion_usuario/change_profile.html",context)
 
-def foto_perfil_random():
-    return str(random.randrange(1,6)) 
+
 
 @login_required
 def register_profile(request):
