@@ -192,6 +192,7 @@ def register_profile(request):
             profile.save()
             return redirect('/change_profile/',profile.id)
            
+           
 
     return render(request, "gestion_usuario/register_profile.html", {'form': form})
 
