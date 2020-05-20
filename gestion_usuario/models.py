@@ -15,7 +15,7 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     fecha_nacimiento = models.DateField(null=True, blank=True)
     nickname = models.CharField(blank=False, max_length=50, null=True,)
-    soyPrincipal = models.BooleanField(default=True)
+    soyPrincipal = models.BooleanField(default=False)
     foto = models.ImageField(upload_to='static/foto_perfil',null=True, blank=True,default='static/foto_perfil/default.jpg')
 
     def __str__(self):

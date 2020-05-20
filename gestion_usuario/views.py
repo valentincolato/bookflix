@@ -41,7 +41,7 @@ def register(request):
         form = UserCreationFormExtends(data=request.POST)
         if form.is_valid():
             user = form.save()
-            prf = Profile(user=user, nickname=user.username)
+            prf = Profile(user=user, nickname=user.username, soyPrincipal=True)
             prf.save()
             if user is not None:
                 do_login(request, user)
@@ -124,6 +124,8 @@ def edit_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+           
+
         else:
             valido = False
     else:
