@@ -3,11 +3,11 @@ from django.contrib.auth import logout as do_logout, authenticate
 from django.contrib.auth import login as do_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .forms import UserCreationFormExtends, UserEditForm, ProfileEditForm
+from .forms import UserCreationFormExtends, UserEditForm, ProfileEditForm,ProfileCreateForm
 from django.contrib.auth.models import User
 from .models import Profile
 from django.shortcuts import get_object_or_404
-import os
+import os,random
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View
 from gestion_noticia.views import noticias, ultimas_noticias
@@ -20,8 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def home(request):
-    context = {"estoy_en_home": True, "noticias": ultimas_noticias(3)}
-    return render(request, 'home.html', context)
+    if request.user.is_authenticated:
+        return redirect('home/')
+
+    context = {"estoy_en_home": True, "noticias": ultimas_noticias(3)}    
+    return render(request, "home.html", context)
 
 
 # Para los usuarios no logueados
@@ -30,7 +33,8 @@ def welcome(request):
         return render(request, "gestion_usuario/welcome.html")
     return redirect('/login')
 
-
+def foto_perfil_random():
+    return str(random.randrange(1,6)) 
 def register(request):
     form = UserCreationFormExtends()
 
@@ -38,10 +42,12 @@ def register(request):
         form = UserCreationFormExtends(data=request.POST)
         if form.is_valid():
             user = form.save()
-            prf = Profile(user=user, nickname=user.username)
+            prf = Profile(user=user, nickname=user.username, soyPrincipal=True)
+            prf.foto ='static/foto_perfil/'+foto_perfil_random()+'.jpg'
             prf.save()
             if user is not None:
                 do_login(request, user)
+                create_session(request)
                 return redirect('/')
     form.fields['username'].help_text = None
     form.fields['password1'].help_text = None
@@ -70,10 +76,12 @@ def create_session(request):
     perfil_primario = Profile.objects.get(user=request.user, soyPrincipal=True)
     request.session['perfil'] = perfil_primario.id
     request.session['usuario'] = perfil_primario.user.id
-
+    request.session['nickname']= (Profile.objects.get(id=perfil_primario.id)).nickname
 
 def change_session_profile(request,id):
     request.session['perfil'] = id
+    request.session['nickname']= (Profile.objects.get(id=id)).nickname
+    return redirect('/')
 
 
 def profile_session(request):
@@ -108,7 +116,7 @@ def logout(request):
 @login_required
 def edit_profile(request):
 
-    instance_profile = Profile.objects.get(user=request.user)
+    instance_profile = profile_session(request)
     valido = True
 
     if request.method == "POST":
@@ -119,6 +127,9 @@ def edit_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            return redirect('/profile')
+           
+
         else:
             valido = False
     else:
@@ -137,7 +148,7 @@ def edit_profile(request):
 @login_required
 def profile(request):
     try:
-        instance_profile = Profile.objects.get(user=request.user)
+        instance_profile = profile_session(request)
     except ObjectDoesNotExist:
         instance_profile = Profile(
             user=request.user, nickname=request.user.username)
@@ -146,11 +157,50 @@ def profile(request):
     context = {
         "fecha_nacimiento": instance_profile.fecha_nacimiento,
         "nickname": instance_profile.nickname,
-        "soyPrincipal": instance_profile.soyPrincipal
+        "soyPrincipal": instance_profile.soyPrincipal,
+        "foto_perfil":(str(instance_profile.foto).split('static'))[1]
     }
     return render(request, "gestion_usuario/profile.html", context)
 
 
+
+def fotos_perfiles(id):
+    perfiles=Profile.objects.filter(user=id)
+    fotos_perfiles= list(map(lambda perfil: (perfil.id, ((str(perfil.foto)).split('static/'))[1] ), perfiles))
+    fotos_dict={}
+    for foto_perfil in fotos_perfiles:
+        fotos_dict[foto_perfil[0]]= foto_perfil[1]
+    return fotos_dict
+
+@login_required
+def change_profile_view(request):
+    perfiles=Profile.objects.filter(user=request.user)
+    context={"estoy_en_home":True,"perfiles":perfiles,"fotos_perfiles":fotos_perfiles(request.user.id)}
+    return render(request, "gestion_usuario/change_profile.html",context)
+
+
+
+@login_required
+def register_profile(request):
+    form = ProfileCreateForm(request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            profile = form.save()
+            profile.user=request.user
+            if profile.foto=='static/foto_perfil/default.jpg':
+                profile.foto ='static/foto_perfil/'+foto_perfil_random()+'.jpg'
+
+            profile.save()
+            return redirect('/change_profile/',profile.id)
+           
+           
+
+    return render(request, "gestion_usuario/register_profile.html", {'form': form})
+
+
 def index(request):
     return render(request, "index.html")
+
+
 

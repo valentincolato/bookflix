@@ -13,43 +13,48 @@ Perfil
 
 
 <!--/ Section News Start /-->
+
 <body id="page-top">
 
-<section id="perfil" class="about-mf sect-pt4 route">
-    
+  <section id="perfil" class="about-mf sect-pt4 route">
+
     <div class="box-shadow-full">
       <div class="row">
         <div class="col-sm-12">
 
-          
-        <h2>Datos de perfil: </h2>
-        <p>Nickname: {{nickname}}</p>
-        {% if not fecha_nacimiento == None %}
-        <p>Fecha nacimiento: {{fecha_nacimiento}}</p>
 
-        {% endif %}
-        <hr>
-        <h2>Datos de cuenta: </h2>
-        <p >Username: {{request.user.username }}</p>
-        <p >Nombre: {{request.user.first_name }}</p>
-        <p >Apellido: {{request.user.last_name }}</p>
-        <p >Email: {{request.user.email }}</p>
-      
+          <h2>Datos de perfil: </h2>
+          {% if foto_perfil %}
+          {% static "" as baseUrl %}
+          <img src="{{ baseUrl }}/{{foto_perfil}}" heigth="100" width="240">
+          {% endif %}
+          <p>Nickname: {{nickname}}</p>
+          {% if not fecha_nacimiento == None %}
+          <p>Fecha nacimiento: {{fecha_nacimiento}}</p>
 
-
-        {% if profile.foto_perfil %}
-        <img src="{{request.profile.foto_perfil}}" width="240">
-        {% endif %}
+          {% endif %}
+          <hr>
+          <h2>Datos de cuenta: </h2>
+          <p>Username: {{request.user.username }}</p>
+          <p>Nombre: {{request.user.first_name }}</p>
+          <p>Apellido: {{request.user.last_name }}</p>
+          <p>Email: {{request.user.email }}</p>
 
 
-        <a href="edit_profile">Editar</a>
 
-          </div>
+
+
+
+          <a href="edit_profile">Editar</a>
+
+
         </div>
+
       </div>
-     
-    
-      </div>
+    </div>
+
+
+    </div>
     </div>
   </section>
 
@@ -59,4 +64,4 @@ Perfil
 
 
 
-{% endblock %}
+  {% endblock %}

@@ -32,6 +32,7 @@ class Libro(models.Model):
 	genero=models.ManyToManyField(Genero)
 	editorial=models.ForeignKey(Editorial, on_delete=models.SET_NULL,null=True,blank=True)
 	pdf=models.FileField(upload_to='pdf',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+	foto=models.ImageField(upload_to='static/foto_libro',blank=True, null=False)
 	def __str__(self):
 		return '%s : %s' % (self.nombre, self.autor)
 

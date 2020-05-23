@@ -1,20 +1,50 @@
 {% extends "padre.html" %}
 
+{% load static %}
 
 {% block title %}
 Cambiar perfil
 {% endblock %}
 
 
-
 {% block content %}
-<section class="contenido wrapper">
-<h2>Cambiar perfil</h2>
 
-    {% for perfil in perfiles %}
-            <a href="/profile">
-            <p><strong>{{perfil.nickname}}</strong></p></a>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@400;600&display=swap"
+	rel="stylesheet">
 
-    {% endfor %}
-</section>
-{% endblock %}
+<body id="page-top">
+	<!--/ Intro Skew Star /-->
+	<div id="home" class="intro route bg-image padre" style="background-color: black;">
+		<div class="overlay-itro"></div>
+		<div class="intro-content display-table">
+			<div class="table-cell">
+				<div class="container">
+					<!--<p class="display-6 color-d">Hello, world!</p>-->
+					<h1 class="intro-title mb-4">¿Quien esta leyendo?</h1>
+
+					<div class="row intro-title mb-4 " style="margin-left: 85px;" >
+						
+						{% for perfil in perfiles %}
+						<div  class="column">
+							{% for key, value in fotos_perfiles.items %}
+							{% ifequal key perfil.id %}
+							{% static "" as baseUrl %}
+							<a href="/change_profile/{{perfil.id}}"><img style="margin-left: 10px;"
+									src="{{ baseUrl }}/{{value}}"  alt="" weight="150" height="150"></a>
+							<p style="font-size: 15px;">{{perfil.nickname}}</p>
+							{% endifequal %}
+							{% endfor %}
+						</div>
+						{% endfor %}
+
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+</div>
+	
+
+	{% endblock %}
