@@ -45,7 +45,7 @@ Libro
                     {% for key, value in fotos_libros.items %}
                     {% ifequal key libro.id %}
                     {% static "" as baseUrl %}
-                    <a href="/libro/{{libro.id}}"><img src="{{ baseUrl }}/{{value}}" alt="" weight="300"
+                    <a href="/libro/{{libro.id}}"><img src="{{ baseUrl }}{{value}}" alt="" weight="300"
                         height="200"></a>
                     {% endifequal %}
 
