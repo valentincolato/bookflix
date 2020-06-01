@@ -158,7 +158,7 @@ def profile(request):
         "fecha_nacimiento": instance_profile.fecha_nacimiento,
         "nickname": instance_profile.nickname,
         "soyPrincipal": instance_profile.soyPrincipal,
-        "foto_perfil":(str(instance_profile.foto).split('static'))[1]
+        "foto_perfil":(str(instance_profile.foto).split('static/'))[1]
     }
     return render(request, "gestion_usuario/profile.html", context)
 
