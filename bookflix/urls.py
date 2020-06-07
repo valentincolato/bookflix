@@ -1,5 +1,4 @@
 """bookflix URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
 Examples:
@@ -15,7 +14,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,re_path
-from gestion_usuario.views import home,welcome,register,login,logout,edit_profile,profile,index,change_profile_view,change_session_profile,register_profile
+from gestion_usuario.views import home,welcome,register,login,logout,edit_profile,profile,index,change_profile_view,change_session_profile,register_profile,desactivar_perfil
 from gestion_noticia.views import news,news_especifica
 from gestion_libro.views import libro_especifico,libro_fav,libros
 from django.conf.urls import url
@@ -28,11 +27,13 @@ urlpatterns = [
     path('register',register),
     path('login',login),
     path('logout',logout),
-    path('profile/edit_profile/', edit_profile),
     path('profile/', profile),
+    path('profile/edit_profile/', edit_profile),
+    path('profile/desactivar_perfil/<id>', desactivar_perfil),
     path('change_profile/', change_profile_view),
     path('change_profile/<id>', change_session_profile),
-     path('register_profile', register_profile),
+    path('register_profile', register_profile),
+    path('profile/desactivar_perfil/<id>', desactivar_perfil),
     path('news/', news),
 	path('news/<newsId>', news_especifica),
     path('libro/<libroId>', libro_especifico),
