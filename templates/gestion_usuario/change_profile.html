@@ -30,7 +30,7 @@ Cambiar perfil
 							{% ifequal key perfil.id %}
 							{% static "" as baseUrl %}
 							<a href="/change_profile/{{perfil.id}}"><img style="margin-left: 10px;"
-									src="{{ baseUrl }}/{{value}}"  alt="" weight="150" height="150"></a>
+									src="{{ baseUrl }}{{value}}"  alt="" weight="150" height="150"></a>
 							<p style="font-size: 15px;">{{perfil.nickname}}</p>
 							{% endifequal %}
 							{% endfor %}

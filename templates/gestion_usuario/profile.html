@@ -26,7 +26,7 @@ Perfil
           <h2>Datos de perfil: </h2>
           {% if foto_perfil %}
           {% static "" as baseUrl %}
-          <img src="{{ baseUrl }}/{{foto_perfil}}" heigth="100" width="240">
+          <img src="{{ baseUrl }}{{foto_perfil}}" heigth="100" width="240">
           {% endif %}
           <p>Nickname: {{nickname}}</p>
           {% if not fecha_nacimiento == None %}
