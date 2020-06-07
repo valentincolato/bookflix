@@ -28,7 +28,9 @@ def fotos_libros():
 def libro_especifico(request, libroId):
     l = Libro.objects.get(id=libroId)
     fav = buscar_fav(request, libroId)
-    contexto = {"libro": l, "favorito": fav}
+    ## Por ahora hasta que se implementen los caps en el modelo
+    caps = [5,10,16,19]
+    contexto = {"libro": l, "favorito": fav, "capitulos":caps}
     return render(request, "libroDetalle.html", contexto)
 
 
@@ -56,8 +58,6 @@ def libro_fav(request, libroId):
 
 @login_required
 def libros(request):
-    
-
     context = {"libros":Libro.objects.all(),"estoy_en_home":True,"fotos_libros":fotos_libros()}
-    
+
     return render(request, "libros.html", context)

@@ -27,6 +27,19 @@ Help
 					<p> Autor: {{libro.autor.nombre}}</p>
 					<br />
 					<p> Cantidad de capitulos: {{libro.cant_capitulos}}</p>
+					<div class="row">
+						<a class="btn btn-secondary col-sm-2 " href="../static/{{ libro.pdf }}"> Comenzar a leer</a>
+						<div class="dropdown col-sm-6">
+							<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Capitulos
+							</button>
+							<div class="dropdown-menu">
+								{% for cap in capitulos %}
+									<a class="dropdown-item" href="../static/{{ libro.pdf}}#page={{cap}}">Capitulo {{forloop.counter}}</a>
+								{%endfor%}
+							</div>
+						</div>
+					</div>
 					<br />
 					<p>Cantidad de paginas: {{libro.cant_paginas}}</p>
 					<br />
@@ -40,11 +53,7 @@ Help
 					</ul>
 					<br />
 					<p> Editorial: {{libro.editorial.nombre}}</p>
-
 					<a href=/fav/{{libro.id}}>{%if favorito%}Sacar{%else%}Marcar{%endif%} como favorito</a>
-
-
-
 	</section>
 
 
