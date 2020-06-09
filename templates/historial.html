@@ -4,7 +4,7 @@
 
 
 {% block title %}
-Search
+Historial
 {% endblock %}
 
 
@@ -17,20 +17,16 @@ Search
     <div class="box-shadow-full">
       <div class="row">
         <div class="col-sm-12">
-          <h1>Resultados por {{filtro}}</h1>
-          {% if libros %}
+          <h1>Historial</h1>
+          <br />
           <ul>
-            {% for libro in libros %}
-            <li><a href="/libro/{{libro.id}}">{{libro.nombre}}</a></li>
-
+            {% for  libro_historial in historiales %}
+            <li><a href="/libro/{{libro_historial.libro.id}}">{{libro_historial.libro.nombre}}</a></li>
             {% endfor %}
           </ul>
-          {% else %}
-          <p>No se encontro ningun libro en tu busqueda</p>
-          {% endif %}
         </div>
       </div>
     </div>
   </section>
-
+  
   {% endblock %}

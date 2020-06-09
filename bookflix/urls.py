@@ -14,9 +14,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,re_path
-from gestion_usuario.views import home,welcome,register,login,logout,edit_profile,profile,index,change_profile_view,change_session_profile,register_profile,desactivar_perfil
+from gestion_usuario.views import home,welcome,register,login,logout,edit_profile,profile,index,change_profile_view,change_session_profile,register_profile,desactivar_perfil,historial
 from gestion_noticia.views import news,news_especifica
-from gestion_libro.views import libro_especifico,libro_fav,libros
+from gestion_libro.views import libro_especifico,libro_fav,libros,SearchResultsView
 from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
@@ -30,18 +30,20 @@ urlpatterns = [
     path('profile/', profile),
     path('profile/edit_profile/', edit_profile),
     path('profile/desactivar_perfil/<id>', desactivar_perfil),
+    path('historial', historial),
     path('change_profile/', change_profile_view),
     path('change_profile/<id>', change_session_profile),
     path('register_profile', register_profile),
-    path('profile/desactivar_perfil/<id>', desactivar_perfil),
     path('news/', news),
 	path('news/<newsId>', news_especifica),
     path('libro/<libroId>', libro_especifico),
     path('home/', libros),
 	path('fav/<libroId>', libro_fav),
+    path('search/', SearchResultsView.as_view(), name='search'),
     path('index', index),
 
 ]
 urlpatterns+= staticfiles_urlpatterns()
+
 # Añadir
 admin.site.site_header = 'Administracion Bookflix'

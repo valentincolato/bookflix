@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserCreationFormExtends, UserEditForm, ProfileEditForm, ProfileCreateForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile,Historial
 from django.shortcuts import get_object_or_404
 import os
 import random
@@ -14,6 +14,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View
 from gestion_noticia.views import noticias, ultimas_noticias
 from gestion_pago.models import Tarjeta
+from gestion_libro.models import Libro
+
 from django.http import HttpResponse
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -237,6 +239,11 @@ def register_profile(request):
         return HttpResponse(resp_body)
 
 
+@login_required
+def historial(request):
+    context = {"historiales":(Historial.objects.filter(perfil= request.session['perfil']).order_by('-fecha'))}
+
+    return render(request, "historial.html", context)
 
 def index(request):
     return render(request, "index.html")
