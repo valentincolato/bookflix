@@ -1,17 +1,20 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as do_logout, authenticate
 from django.contrib.auth import login as do_login
+from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .forms import UserCreationFormExtends, UserEditForm, ProfileEditForm,ProfileCreateForm
+from .forms import UserCreationFormExtends, UserEditForm, ProfileEditForm, ProfileCreateForm
 from django.contrib.auth.models import User
 from .models import Profile
 from django.shortcuts import get_object_or_404
-import os,random
+import os
+import random
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View
 from gestion_noticia.views import noticias, ultimas_noticias
-
+from gestion_pago.models import Tarjeta
+from django.http import HttpResponse
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,9 +24,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def home(request):
     if request.user.is_authenticated:
+  
         return redirect('home/')
 
-    context = {"estoy_en_home": True, "noticias": ultimas_noticias(3)}    
+    context = {"estoy_en_home": True, "noticias": ultimas_noticias(3)}
     return render(request, "home.html", context)
 
 
@@ -33,8 +37,11 @@ def welcome(request):
         return render(request, "gestion_usuario/welcome.html")
     return redirect('/login')
 
+
 def foto_perfil_random():
-    return str(random.randrange(1,6)) 
+    return str(random.randrange(1, 6))
+
+
 def register(request):
     form = UserCreationFormExtends()
 
@@ -43,8 +50,12 @@ def register(request):
         if form.is_valid():
             user = form.save()
             prf = Profile(user=user, nickname=user.username, soyPrincipal=True)
-            prf.foto ='static/foto_perfil/'+foto_perfil_random()+'.jpg'
+            prf.foto = 'static/foto_perfil/'+foto_perfil_random()+'.jpg'
             prf.save()
+
+            # creo objeto tarjeta cualquiera hay que modificar esto en el futuro
+            tarj = Tarjeta(user=user, numero='1234567', cvc='11')
+            tarj.save()
             if user is not None:
                 do_login(request, user)
                 create_session(request)
@@ -76,17 +87,36 @@ def create_session(request):
     perfil_primario = Profile.objects.get(user=request.user, soyPrincipal=True)
     request.session['perfil'] = perfil_primario.id
     request.session['usuario'] = perfil_primario.user.id
-    request.session['nickname']= (Profile.objects.get(id=perfil_primario.id)).nickname
+    request.session['nickname'] = (Profile.objects.get(id=perfil_primario.id)).nickname
 
-def change_session_profile(request,id):
+
+def change_session_profile(request, id):
     request.session['perfil'] = id
-    request.session['nickname']= (Profile.objects.get(id=id)).nickname
+    request.session['nickname'] = (Profile.objects.get(id=id)).nickname
+
     return redirect('/')
 
 
 def profile_session(request):
     return Profile.objects.get(id=request.session.get('perfil'))
 
+
+def desactivar_perfil(request, id):
+
+    profile = Profile.objects.get(id=id)
+    if profile.soyPrincipal:
+        url = '/profile'
+        resp_body = '<script>alert("No se puede desactivar el perfil principal");\
+             window.location="%s"</script>' % url
+        
+        return HttpResponse(resp_body)
+    else:
+        profile.user=None
+        profile.save()
+        profile = Profile.objects.get(user=request.user, soyPrincipal=True)
+        request.session['perfil'] = profile.id
+        request.session['nickname'] = profile.nickname
+        return redirect('/change_profile')
 
 # def sesion_perfil(request):
     # perfil_primario= Profile.objects.get(user=request.user,soyPrincipal=True)
@@ -108,8 +138,10 @@ def profile_session(request):
     # # print(s['sesion_perfil'])
     # # s=session_data
 
+
 def logout(request):
     do_logout(request)
+    request.session['perfil'] = None
     return redirect('/')
 
 
@@ -128,7 +160,6 @@ def edit_profile(request):
             user_form.save()
             profile_form.save()
             return redirect('/profile')
-           
 
         else:
             valido = False
@@ -158,49 +189,54 @@ def profile(request):
         "fecha_nacimiento": instance_profile.fecha_nacimiento,
         "nickname": instance_profile.nickname,
         "soyPrincipal": instance_profile.soyPrincipal,
-        "foto_perfil":(str(instance_profile.foto).split('static/'))[1]
+        "foto_perfil": (str(instance_profile.foto).split('static/'))[1]
     }
     return render(request, "gestion_usuario/profile.html", context)
 
 
-
 def fotos_perfiles(id):
-    perfiles=Profile.objects.filter(user=id)
-    fotos_perfiles= list(map(lambda perfil: (perfil.id, ((str(perfil.foto)).split('static/'))[1] ), perfiles))
-    fotos_dict={}
+    perfiles = Profile.objects.filter(user=id)
+    fotos_perfiles = list(map(lambda perfil: (
+        perfil.id, ((str(perfil.foto)).split('static/'))[1]), perfiles))
+    fotos_dict = {}
     for foto_perfil in fotos_perfiles:
-        fotos_dict[foto_perfil[0]]= foto_perfil[1]
+        fotos_dict[foto_perfil[0]] = foto_perfil[1]
     return fotos_dict
+
 
 @login_required
 def change_profile_view(request):
-    perfiles=Profile.objects.filter(user=request.user)
-    context={"estoy_en_home":True,"perfiles":perfiles,"fotos_perfiles":fotos_perfiles(request.user.id)}
-    return render(request, "gestion_usuario/change_profile.html",context)
-
+    perfiles = Profile.objects.filter(user=request.user)
+    context = {"estoy_en_home": True, "perfiles": perfiles,
+               "fotos_perfiles": fotos_perfiles(request.user.id)}
+    return render(request, "gestion_usuario/change_profile.html", context)
 
 
 @login_required
 def register_profile(request):
-    form = ProfileCreateForm(request.POST or None)
+    cant_profiles=len(Profile.objects.filter(user=request.user))
+    tipo_suscripcion=(Tarjeta.objects.get(user=request.user)).tipo_suscripcion
+    if ((tipo_suscripcion.lower()=='regular' and cant_profiles<2) or (tipo_suscripcion.lower()=='premium' and cant_profiles<4)):
+        form = ProfileCreateForm(request.POST or None)
+        if request.method == "POST":
+            if form.is_valid():
+                profile = form.save()
+                profile.user = request.user
+                if profile.foto == 'static/foto_perfil/default.jpg':
+                    profile.foto = 'static/foto_perfil/'+foto_perfil_random()+'.jpg'
 
-    if request.method == "POST":
-        if form.is_valid():
-            profile = form.save()
-            profile.user=request.user
-            if profile.foto=='static/foto_perfil/default.jpg':
-                profile.foto ='static/foto_perfil/'+foto_perfil_random()+'.jpg'
+                profile.save()
+                return redirect('/change_profile/', profile.id)
 
-            profile.save()
-            return redirect('/change_profile/',profile.id)
-           
-           
+        return render(request, "gestion_usuario/register_profile.html", {'form': form})
+    else:
+        url = '/'
+        resp_body = '<script>alert("No se pueden agregar mas perfiles se supero el maximo");\
+                        window.location="%s"</script>' % url
+        
+        return HttpResponse(resp_body)
 
-    return render(request, "gestion_usuario/register_profile.html", {'form': form})
 
 
 def index(request):
     return render(request, "index.html")
-
-
-
