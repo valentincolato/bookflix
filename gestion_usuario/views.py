@@ -14,8 +14,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View
 from gestion_noticia.views import noticias, ultimas_noticias
 from gestion_pago.models import Tarjeta
-from gestion_libro.models import Libro
-
 from django.http import HttpResponse
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
