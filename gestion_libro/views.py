@@ -88,13 +88,16 @@ def comparar_genero(query, generos):
 
 
 def buscar_libros(filtro, query):
-
-    switcher = {
-        "nombre": list(filter(lambda libro: comparar_string(query, libro.nombre), Libro.objects.all())),
-        "genero": list(filter(lambda libro: comparar_genero(query, libro.genero.all()), Libro.objects.all())),
-        "autor": list(filter(lambda libro: comparar_string(query, libro.autor), Libro.objects.all())),
-        "editorial": list(filter(lambda libro: comparar_string(query, libro.editorial), Libro.objects.all())),
-    }
+    ##tuve que meter este if en este metodo porque si lo hacia en SearchResultsViews daba error de sintaxis no entiendo porque pero gueno
+    if len(query)==0:
+        return None
+    else:   
+        switcher = {
+            "nombre": list(filter(lambda libro: comparar_string(query, libro.nombre), Libro.objects.all())),
+            "genero": list(filter(lambda libro: comparar_genero(query, libro.genero.all()), Libro.objects.all())),
+            "autor": list(filter(lambda libro: comparar_string(query, libro.autor), Libro.objects.all())),
+            "editorial": list(filter(lambda libro: comparar_string(query, libro.editorial), Libro.objects.all())),
+        }
     return switcher[filtro]
 
 
@@ -106,7 +109,7 @@ class SearchResultsView(ListView):
 
         query = self.request.GET['q']
         filtro = self.request.GET['filter']
-
+            
         context = {"libros": buscar_libros(filtro, normalize(query.lower())),
                    "filtro": filtro}
 
