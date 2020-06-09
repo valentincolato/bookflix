@@ -66,7 +66,6 @@ def libros(request):
     return render(request, "libros.html", context)
 
 
-
 def normalize(s):
     replacements = (
         ("á", "a"),
@@ -79,19 +78,22 @@ def normalize(s):
         s = s.replace(a, b).replace(a.upper(), b.upper())
     return s
 
-def comparar_string(query,filtro):
+
+def comparar_string(query, filtro):
     return query in normalize(str(filtro).lower())
 
-def comparar_genero(query,generos):
-    return any(comparar_string(query,genero) for genero in generos)
+
+def comparar_genero(query, generos):
+    return any(comparar_string(query, genero) for genero in generos)
+
 
 def buscar_libros(filtro, query):
 
     switcher = {
-        "nombre": list(filter(lambda libro: comparar_string(query,libro.nombre), Libro.objects.all())),
-        "genero": list(filter(lambda libro: comparar_genero(query,libro.genero.all()), Libro.objects.all())),
-        "autor": list(filter(lambda libro: comparar_string(query,libro.autor), Libro.objects.all())),
-        "editorial": list(filter(lambda libro: comparar_string(query,libro.editorial), Libro.objects.all())),
+        "nombre": list(filter(lambda libro: comparar_string(query, libro.nombre), Libro.objects.all())),
+        "genero": list(filter(lambda libro: comparar_genero(query, libro.genero.all()), Libro.objects.all())),
+        "autor": list(filter(lambda libro: comparar_string(query, libro.autor), Libro.objects.all())),
+        "editorial": list(filter(lambda libro: comparar_string(query, libro.editorial), Libro.objects.all())),
     }
     return switcher[filtro]
 
@@ -109,4 +111,3 @@ class SearchResultsView(ListView):
                    "filtro": filtro}
 
         return context
-
