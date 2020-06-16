@@ -22,6 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # @login_required(login_url="/login")
 
 
+
+
+
 def home(request):
     if request.user.is_authenticated:
   
