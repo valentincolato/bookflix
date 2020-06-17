@@ -16,7 +16,7 @@ from django.contrib import admin
 from django.urls import path,re_path
 from gestion_usuario.views import home,welcome,register,login,logout,edit_profile,profile,index,change_profile_view,change_session_profile,register_profile,desactivar_perfil,historial
 from gestion_noticia.views import news,news_especifica
-from gestion_libro.views import libro_especifico,libro_fav,libros,SearchResultsView
+from gestion_libro.views import libro_especifico,libro_fav,libros,SearchResultsView,libro_no_disponible
 from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
@@ -41,6 +41,9 @@ urlpatterns = [
 	path('fav/<libroId>', libro_fav),
     path('search/', SearchResultsView.as_view(), name='search'),
     path('index', index),
+	path('libronodisponible', libro_no_disponible),
+	
+	
 
 ]
 urlpatterns+= staticfiles_urlpatterns()

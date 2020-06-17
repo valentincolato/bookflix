@@ -10,107 +10,141 @@ from django.views.generic import TemplateView, ListView
 # Create your views here.
 
 from gestion_usuario.views import profile_session
-from gestion_usuario.models import Favorito
+from gestion_usuario.models import Favorito,Historial
 # view_pdf
 from tika import parser
 # proteger
 
+from datetime import date
+
+
+
+
 
 def fotos_libros():
-    libros = Libro.objects.all()
-    fotos_libros = list(
-        map(lambda libro: (libro.id, ((str(libro.foto)).split('static/'))[1]), libros))
-    fotos_dict = {}
-    for foto_libro in fotos_libros:
-        fotos_dict[foto_libro[0]] = foto_libro[1]
-    return fotos_dict
+	libros = Libro.objects.all()
+	fotos_libros = list(
+		map(lambda libro: (libro.id, ((str(libro.foto)).split('static/'))[1]), libros))
+	fotos_dict = {}
+	for foto_libro in fotos_libros:
+		fotos_dict[foto_libro[0]] = foto_libro[1]
+	return fotos_dict
 
+
+
+def libro_no_disponible(request):
+	return render(request, "libronodisponible.html")
+	
+def disponibilidad_libro(libro):
+	return libro.ocultar==False and (libro.fecha_vencimiento==None or libro.fecha_vencimiento>=date.today())
 
 def libro_especifico(request, libroId):
-    l = Libro.objects.get(id=libroId)
-    fav = buscar_fav(request, libroId)
-    # Por ahora hasta que se implementen los caps en el modelo
-    caps = [5, 10, 16, 19]
-    contexto = {"libro": l, "favorito": fav, "capitulos": caps}
-    return render(request, "libroDetalle.html", contexto)
+	l = Libro.objects.get(id=libroId)
+	if disponibilidad_libro(l)==False:
+		return redirect('/libronodisponible')
+	else:
+		fav = buscar_fav(request, libroId)
+		agregar_a_historial(libroId, profile_session(request))
+		caps = decodificar_caps(l)
+		contexto = {"libro": l, "favorito": fav, "capitulos": caps}
+	return render(request, "libroDetalle.html", contexto)
 
 
 def buscar_fav(request, libroId):
-    try:
-        fav = (Favorito.objects.get(libro_id=libroId,
-                                    perfil_id=profile_session(request)))
-    except:
-        fav = None
-    return fav
+	try:
+		fav = (Favorito.objects.get(libro_id=libroId,perfil_id=profile_session(request)))
+	except:
+		fav = None
+	return fav
 
 # proteger
-
-
 def libro_fav(request, libroId):
-    fav = buscar_fav(request, libroId)
-    if fav != None:
-        fav.delete()
-    else:
-        l = Libro.objects.get(id=libroId)
-        per = profile_session(request)
-        fav = Favorito(libro=l, perfil=per)
-        fav.save()
-    return redirect('/libro/'+str(libroId))
+	fav = buscar_fav(request, libroId)
+	if fav != None:
+		fav.delete()
+	else:
+		l = Libro.objects.get(id=libroId)
+		per = profile_session(request)
+		fav = Favorito(libro=l, perfil=per)
+		fav.save()
+	return redirect('/libro/'+str(libroId))
+
+
+def agregar_a_historial(libroId, perf):
+	try:
+		his = (Historial.objects.get(libro_id=libroId,perfil_id=profile_session(request)))
+	except:
+		his = None
+	if his == None:
+		his= Historial(libro=Libro.objects.get(id=libroId), perfil=perf, pagina=1)
+		his.save()
+	else:
+		his.save()#se supone que actualiza la fecha
+
+
+def decodificar_caps(libro):
+	caps=libro.capitulos
+	caps= caps.replace(' ','')
+	caps=caps.split(',')
+	lista= list(map(lambda x: int(x), filter(lambda y: y.isnumeric() ,caps)))
+	print(lista)
+	return lista
+	
 
 
 @login_required
 def libros(request):
-    context = {"libros": Libro.objects.all(), "estoy_en_home": True,
-               "fotos_libros": fotos_libros()}
+	context = {"libros": Libro.objects.all(), "estoy_en_home": True,
+			   "fotos_libros": fotos_libros()}
 
-    return render(request, "libros.html", context)
+	return render(request, "libros.html", context)
 
 
 def normalize(s):
-    replacements = (
-        ("á", "a"),
-        ("é", "e"),
-        ("í", "i"),
-        ("ó", "o"),
-        ("ú", "u"),
-    )
-    for a, b in replacements:
-        s = s.replace(a, b).replace(a.upper(), b.upper())
-    return s
+	replacements = (
+		("á", "a"),
+		("é", "e"),
+		("í", "i"),
+		("ó", "o"),
+		("ú", "u"),
+	)
+	for a, b in replacements:
+		s = s.replace(a, b).replace(a.upper(), b.upper())
+	return s
 
 
 def comparar_string(query, filtro):
-    return query in normalize(str(filtro).lower())
+	return query in normalize(str(filtro).lower())
 
 
 def comparar_genero(query, generos):
-    return any(comparar_string(query, genero) for genero in generos)
+	return any(comparar_string(query, genero) for genero in generos)
 
 
 def buscar_libros(filtro, query):
-    ##tuve que meter este if en este metodo porque si lo hacia en SearchResultsViews daba error de sintaxis no entiendo porque pero gueno
-    if len(query)==0:
-        return None
-    else:   
-        switcher = {
-            "nombre": list(filter(lambda libro: comparar_string(query, libro.nombre), Libro.objects.all())),
-            "genero": list(filter(lambda libro: comparar_genero(query, libro.genero.all()), Libro.objects.all())),
-            "autor": list(filter(lambda libro: comparar_string(query, libro.autor), Libro.objects.all())),
-            "editorial": list(filter(lambda libro: comparar_string(query, libro.editorial), Libro.objects.all())),
-        }
-    return switcher[filtro]
+	##tuve que meter este if en este metodo porque si lo hacia en SearchResultsViews daba error de sintaxis no entiendo porque pero gueno
+	if len(query)==0:
+		return None
+	else:   
+		switcher = {
+			"nombre": list(filter(lambda libro: comparar_string(query, libro.nombre), Libro.objects.all())),
+			"genero": list(filter(lambda libro: comparar_genero(query, libro.genero.all()), Libro.objects.all())),
+			"autor": list(filter(lambda libro: comparar_string(query, libro.autor), Libro.objects.all())),
+			"editorial": list(filter(lambda libro: comparar_string(query, libro.editorial), Libro.objects.all())),
+		}
+	return switcher[filtro]
 
 
 class SearchResultsView(ListView):
-    model = Libro
-    template_name = 'search.html'
+	model = Libro
+	template_name = 'search.html'
 
-    def get_context_data(self, *args, **kwargs):
+	def get_context_data(self, *args, **kwargs):
 
-        query = self.request.GET['q']
-        filtro = self.request.GET['filter']
-            
-        context = {"libros": buscar_libros(filtro, normalize(query.lower())),
-                   "filtro": filtro}
+		query = self.request.GET['q']
+		filtro = self.request.GET['filter']
+			
+		context = {"libros": buscar_libros(filtro, normalize(query.lower())),
+				   "filtro": filtro}
 
-        return context
+		return context
