@@ -42,8 +42,6 @@ urlpatterns = [
     path('search/', SearchResultsView.as_view(), name='search'),
     path('index', index),
 	path('libronodisponible', libro_no_disponible),
-	
-	
 
 ]
 urlpatterns+= staticfiles_urlpatterns()

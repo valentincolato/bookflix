@@ -19,7 +19,7 @@
           <span></span>
         </button>
         <div class="navbar-collapse collapse justify-content-end" colo id="navbarDefault">
-          
+          {% if user.is_authenticated %}
           <form class="form-inline"  action="{% url 'search' %}" method="get" class="form-inline">
             <input id="id_search" class="form-control mr-sm-2" name="q" type="text" name="q" placeholder="Buscar libro" value="{{ request.GET.q }}" class="form-control">
             <select id="filter_field" name="filter" class="form-control">
@@ -29,23 +29,25 @@
                 <option value="editorial">Editorial</option>
             </select>
             <input type="submit" value="Search" class="btn btn-danger">
-        </form>
- 
-      
-
+          </form>
+          {% endif %}
           <ul class="navbar-nav">
             <li class="nav-item">
               <a class="nav-link js-scroll active" href="/">Home</a>
             </li>
+            <!--
             <li class="nav-item">
               <a class="nav-link js-scroll" href="/news">Noticias</a>
             </li>
+            -->
 
 
             {% if not user.is_authenticated %}
+            <!--
             <li class="nav-item">
               <a class="nav-link js-scroll" href="/#contact">Sobre nosotros</a>
             </li>
+          -->
             <li class="nav-item">
               <a class="nav-link js-scroll" href="/login">login</a>
             </li>
