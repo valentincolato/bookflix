@@ -18,7 +18,7 @@ class Trailer(models.Model):
 	titulo = models.CharField(max_length=50)
 	cuerpo = models.TextField(blank=True)
 	libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
-	video=models.FileField(upload_to='static/video_trailer',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['mp4'])])
+	video=models.FileField(upload_to='static/video_trailer',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['mp4','webm'])])
 	fecha_de_creacion = models.DateField()
 	def __str__(self):
 		return '%s' % (self.titulo)

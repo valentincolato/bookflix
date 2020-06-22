@@ -27,12 +27,14 @@ class Libro(models.Model):
 	nombre=models.CharField(max_length=50,default='')
 	ISBN = models.CharField(max_length=50,unique=True)
 	autor=models.ForeignKey(Autor, on_delete=models.SET_NULL,null=True,blank=True)
-	capitulos = models.TextField(blank=True,help_text="Por favor separar cada pagina por una ',' ej: 10,30,35,102",)
 	cant_paginas = models.PositiveIntegerField()
 	genero=models.ManyToManyField(Genero)
 	editorial=models.ForeignKey(Editorial, on_delete=models.SET_NULL,null=True,blank=True)
 	fecha_vencimiento = models.DateField(null=True,blank=True)
-	pdf=models.FileField(upload_to='pdf',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+	pdf=models.FileField(upload_to='static/pdf',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+	nuevo_capitulo=models.FileField(upload_to='static/pdf/capitulos/',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+	capitulos = models.TextField(blank=True,help_text="Por favor separar cada pagina por una ',' ej: 10,30,35,102",)
+
 	foto=models.ImageField(upload_to='static/foto_libro',blank=True, null=True)
 	ocultar= models.BooleanField(default=False)
 	def __str__(self):

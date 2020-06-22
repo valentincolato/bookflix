@@ -1,0 +1,34 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+
+{% block title %}
+Trailer
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<body id="page-top">
+
+	<section id="perfil" class="about-mf sect-pt4 route">
+		<div class="box-shadow-full">
+			<div class="row">
+				<div class="col-sm-12">
+					<h1>{{trailer.titulo}}</h1>
+          <br />
+					<p>{{trailer.cuerpo}}</p>
+          <br />
+          {% if trailer.video%}
+					  <video width="320" height="240" controls>
+              <source src="../{{ trailer.video}}" type="video/mp4">
+            </video>
+          {% endif%}
+	</section>
+
+
+
+	{% endblock %}

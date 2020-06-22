@@ -8,7 +8,7 @@ import os
 from django.db.models import Q  # new
 from django.views.generic import TemplateView, ListView
 # Create your views here.
-
+from gestion_noticia.models import Noticia
 from gestion_usuario.views import profile_session
 from gestion_usuario.models import Favorito,Historial
 # view_pdf
@@ -72,14 +72,10 @@ def libro_fav(request, libroId):
 
 def agregar_a_historial(libroId, perf):
 	try:
-		his = (Historial.objects.get(libro_id=libroId,perfil_id=profile_session(request)))
+		his = Historial.objects.get(libro_id=libroId,perfil_id=perf)
 	except:
-		his = None
-	if his == None:
-		his= Historial(libro=Libro.objects.get(id=libroId), perfil=perf, pagina=1)
-		his.save()
-	else:
-		his.save()#se supone que actualiza la fecha
+		his = Historial(libro=Libro.objects.get(id=libroId), perfil=perf, pagina=1)
+	his.save()
 
 
 def decodificar_caps(libro):
@@ -89,13 +85,13 @@ def decodificar_caps(libro):
 	lista= list(map(lambda x: int(x), filter(lambda y: y.isnumeric() ,caps)))
 	print(lista)
 	return lista
-	
 
-
+def libros_disponibles(libros):
+	return list(filter(lambda libro: disponibilidad_libro(libro),libros))
 @login_required
 def libros(request):
-	context = {"libros": Libro.objects.all(), "estoy_en_home": True,
-			   "fotos_libros": fotos_libros()}
+	context = {"libros": libros_disponibles(Libro.objects.all()), "estoy_en_home": True,
+			   "fotos_libros": fotos_libros(),"noticias":Noticia.objects.all()}
 
 	return render(request, "libros.html", context)
 

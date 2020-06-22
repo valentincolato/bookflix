@@ -21,8 +21,7 @@ Search
           {% if libros %}
           <ul>
             {% for libro in libros %}
-            <li><a href="/libro/{{libro.id}}">{{libro.nombre}}</a></li>
-
+              <li><a href="/libro/{{libro.id}}"> {{libro.nombre}} - {{libro.autor}} - {{libro.editorial}} </a></li>
             {% endfor %}
           </ul>
           {% else %}

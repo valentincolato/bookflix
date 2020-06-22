@@ -1,0 +1,13 @@
+{% extends 'admin/change_form.html' %}
+
+{% block submit_buttons_bottom %}
+    {{ block.super }}
+    <div  class="submit-row" style="position: absolute;
+									left: 80%;
+									top: 47rem;
+									background: none;
+									border: none;
+									">
+		<input type="submit" value="Agregar Capitulo" name="_make-unique">
+    </div>
+{% endblock %}

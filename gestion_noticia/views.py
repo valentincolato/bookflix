@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import Noticia
+from .models import Noticia,Trailer
 
 # Create your views here.
 def news(request):
@@ -20,3 +20,13 @@ def noticias():
 def ultimas_noticias(n):
 	noticias=Noticia.objects.order_by('-fecha_de_creacion')[0:n]
 	return noticias
+
+def trailer(request):
+	trailers=Trailer.objects.order_by('-fecha_de_creacion')
+	contexto={"trailers":trailers}
+	return render(request, "trailer.html",contexto)
+
+def trailer_especifico(request,trailerId):
+	trailer=Trailer.objects.get(id=trailerId)
+	contexto={"trailer":trailer}
+	return render(request, "trailerEspecifico.html",contexto)
