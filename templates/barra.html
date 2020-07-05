@@ -41,7 +41,9 @@
             </li>
            
 
-
+            <li class="nav-item">
+              <a class="nav-link js-scroll" href="/#contact">About us</a>
+            </li>
             {% if not user.is_authenticated %}
             
             
@@ -52,9 +54,7 @@
               <a class="nav-link js-scroll" href="/register">Registrarse</a>
             </li>
             {% else %}
-            <li class="nav-item">
-              <a class="nav-link js-scroll" href="/#contact">About us</a>
-            </li>
+            
 
             <ul class="nav navbar-nav ml-auto">
               <li class="nav-item dropdown">
