@@ -1,7 +1,9 @@
 from django.contrib import admin
-
-from gestion_usuario.models import Favorito,Comentario,Historial,Profile,Puntaje
-
+from django.contrib.auth.models import User
+from django.conf.urls import url
+from django import forms
+from gestion_usuario.models import Favorito, Comentario, Historial, Profile, Puntaje,Leidos
+from django.contrib.admin import SimpleListFilter, DateFieldListFilter,FieldListFilter
 
 
 # Register your models here.
@@ -12,3 +14,13 @@ admin.site.register(Comentario)
 admin.site.register(Profile)
 admin.site.register(Puntaje)
 admin.site.register(Favorito)
+admin.site.register(Leidos)
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['username', 'date_joined', 'is_staff']
+    actions = ['Informe_entre_dos_fechas']
+
+
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)

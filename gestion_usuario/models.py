@@ -48,6 +48,14 @@ class Historial(models.Model):
         return 'de %s' % (self.perfil)
 
 
+class Leidos(models.Model):
+    libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
+    perfil = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    fecha = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return 'de %s' % (self.libro)
+
 class Favorito(models.Model):
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     perfil = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -60,7 +68,7 @@ class Favorito(models.Model):
 class Comentario(models.Model):
     perfil = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     texto = models.TextField()
-    libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
+    libro = models.ForeignKey(Libro, on_delete=models.CASCADE,null=True)
     fecha = models.DateField(auto_now=True)
 
     def __str__(self):

@@ -1,0 +1,179 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block title %}
+Libro
+{% endblock %}
+
+
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@400;600&display=swap"
+  rel="stylesheet">
+
+<body id="page-top">
+  <div id="home" class="intro  bg-image " style="background-image: url('{% static 'foto_libro/maquiavelo.jpeg' %}')">
+    <div class="overlay-itro libro-principal">
+      <div class="contenedor container">
+        <h3 style="color: blanchedalmond;" class="titulo">El principe</h3>
+        <p class="descripcion">
+          El príncipe es un tratado político del siglo XVI del diplomático y teórico político italiano Nicolás
+          Maquiavelo. Según la correspondencia de Maquiavelo, una versión parece haber sido distribuida en 1513,
+          usando el título en latín De Principatibus.​ </p>
+
+      </div>
+    </div>
+  </div>
+  <section class="blog-mf sect-pt4 route">
+    <div class="row" style="overflow-x:auto">
+      {% for noticia in noticias %}
+      <div class="col-md-4">
+        <div class="card card-blog">
+          <div class="card-body">
+            <h3 class="card-title"><a href="/news/{{noticia.id}}">{{noticia.titulo}}</a></h3>
+            <p class="card-description">
+              {{noticia.cuerpo | truncatechars:35}}
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    </div>
+  </section>
+  <section class="blog-mf sect-pt4 route">
+    <div class="libros-recomendados contenedor container">
+      <div class="row">
+
+        <div class="col-sm-12 indicadores ">
+          <h3>Libros </h3>
+          <div class="contenedor-titulo-controles">
+            <div class="contenedor-principal">
+              <button role="button" id="flecha-izquierda" class="flecha-izquierda"><i
+                  class="fas fa-angle-left"></i></button>
+              <div class="contenedor-carousel">
+                <div class="carousel">
+                  {% for libro in libros %}
+                  <div class="libro">
+                    {% for key, value in fotos_libros.items %}
+                    {% ifequal key libro.id %}
+                    {% static "" as baseUrl %}
+                    <a href="/libro/{{libro.id}}"><img src="{{ baseUrl }}{{value}}" alt="" weight="300"
+                        height="200"></a>
+                    {% endifequal %}
+
+                    {% endfor %}
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              <button role="button" id="flecha-derecha" class="flecha-derecha"><i
+                  class="fas fa-angle-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="libros-recomendados contenedor container">
+      <div class="row">
+
+        <div class="col-sm-12 indicadores ">
+
+          <h3>Libros favoritos</h3>
+          {% if libros_favoritos %}
+
+          <div class="contenedor-titulo-controles">
+            <div class="contenedor-principal">
+              <button role="button" id="flecha-izquierda" class="flecha-izquierda"><i
+                  class="fas fa-angle-left"></i></button>
+              <div class="contenedor-carousel">
+                <div class="carousel">
+                  {% for fav in libros_favoritos %}
+                  <div class="libro">
+                    {% for key, value in fotos_libros.items %}
+                    {% ifequal key fav.libro.id %}
+                    {% static "" as baseUrl %}
+                    <a href="/libro/{{fav.libro.id}}"><img src="{{ baseUrl }}{{value}}" alt="" weight="300"
+                        height="200"></a>
+                    {% endifequal %}
+
+                    {% endfor %}
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              <button role="button" id="flecha-derecha" class="flecha-derecha"><i
+                  class="fas fa-angle-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <p>No contiene libros favoritos</p>
+    {% endif %}
+  </section>
+
+
+
+  <!--/ Sobre nosotros begin/-->
+  <section id="contact" class="about-mf sect-pt4 route">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="box-shadow-full">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="about-me pt-4 pt-md-0">
+                  <div class="title-box-2">
+                    <h5 class="title-left">
+                      Sobre nosotros
+                    </h5>
+                  </div>
+                  <p class="lead">
+                    La lectura va en contra de los ocupados tiempos modernos.
+                    Bookflix surgió como una solución a este problema
+                  </p>
+                  <p class="lead">
+                    Somos PCODE un grupo de desarrolladores de software,desarrollamos Bookflix, una plataforma de
+                    lectura online para leer desde donde estes.
+                    Con bookflix vas a tener una biblioteca al alcance de tu mano.
+                  </p>
+                  <p class="lead">
+                    Bookflix es íntegramente digital por lo que reducimos los costos de logística, para que puedas
+                    acceder a tus libros favoritos por un precio moderado.
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-6">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="copyright-box">
+            <p class="copyright">&copy; Copyright <strong>PCODE</strong>. All Rights Reserved</p>
+            <div class="credits">
+              <!--
+                  All the links in the footer should remain intact.
+                  You can delete the links only if you purchased the pro version.
+                  Licensing information: https://bootstrapmade.com/license/
+                  Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=DevFolio
+                -->
+              Designed by <a>PCODE</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  </section>
+
+  {% endblock %}

@@ -9,7 +9,7 @@ Help
 
 
 {% block content %}
-
+ 
 
 
 <body id="page-top">
@@ -29,22 +29,29 @@ Help
 					<p> Cantidad de capitulos: {{libro.cant_capitulos}}</p>
 					<div class="row">
 						{% if libro.pdf %}
-							<a class="btn btn-secondary col-sm-2 " href="../{{ libro.pdf }}"> Comenzar a leer</a>
-							{% if capitulos %}
-								<div class="dropdown col-sm-6">
-									<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										Capitulos
-									</button>
-									<div class="dropdown-menu">
-										{% for cap in capitulos %}
-											<a class="dropdown-item" href="../{{ libro.pdf}}#page={{cap}}">Capitulo {{forloop.counter}}</a>
-										{%endfor%}
-									</div>
-								</div>
-							{% endif %}
+						<a class="btn btn-secondary col-sm-2 " href="../{{ libro.pdf }}"> Comenzar a leer</a>
+						
+						{% if capitulos %}
+						<div class="dropdown ">
+							<button style='margin-left: 20px; margin-right: 10px;' class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Capitulos
+							</button>
+							<div class="dropdown-menu">
+								{% for cap in capitulos %}
+								<a class="dropdown-item" href="../{{ libro.pdf}}#page={{cap}}">Capitulo
+									{{forloop.counter}}</a>
+								{%endfor%}
+							</div>
+						</div>
+						{% endif %}
+						{% if not termino_lectura  %}
+						<a style='margin-left: 20px; margin-left: 0px;'class="btn btn-danger col-sm-2 " href="terminar_lectura/{{libro.id}}">Terminar lectura</a>
+						{% endif %}
 						{% endif %}
 					</div>
-					<br />
+					
+					
 					<p>Cantidad de paginas: {{libro.cant_paginas}}</p>
 					<br />
 					<p> Genero: </p>
@@ -58,8 +65,73 @@ Help
 					<br />
 					<p> Editorial: {{libro.editorial.nombre}}</p>
 					<a href=/fav/{{libro.id}}>{%if favorito%}Sacar{%else%}Marcar{%endif%} como favorito</a>
+
+
+
 	</section>
+	{% if termino_lectura  %}
+
+	<section class="about-mf sect-pt4 route  gazette-post-discussion-area section_padding_100 ">
+		
+			<div class="row justify-content-center">
+				<div class="col-12 col-md-8">
+					<!-- Comment Area Start -->
+					<div class="comment_area  clearfix">
+						<div class="gazette-heading">
+							<h4 class="font-bold">Comentarios</h4>
+						</div>
+
+						<ol>
+							{% for comentario in comentarios %}
+							<!-- Single Comment Area -->
+							<li class="single_comment_area">
+								<div class="comment-wrapper d-md-flex align-items-start">
+									<!-- Comment Meta -->
+									<div class="comment-author">
+										<img class= "comment-img"src="{% static 'foto_perfil/default.jpg'%}">
+									</div>
+									<!-- Comment Content -->
+									
+									<div class="comment-content">
+										
+										<h5>{{comentario.perfil.nickname}}</h5>
+										<span class="comment-date font-pt">{{comentario.fecha}} {% if comentario.perfil.id == request.session.perfil %}
+											<button style='margin-left: 500px;' class='btn  btn-danger' type="reset" onclick="window.location.href = 'borrar_comentario/{{comentario.id}}'">Borrar</button>
+											{% endif %} </span>
+										<p>{{comentario.texto}}</p>
+										
+
+									</div>
+								</div>
+							</li>
+							{% endfor %}
+						</ol>
+					</div>
 
 
+					<!-- Leave A Comment -->
+					<div class="leave-comment-area clearfix">
+						<div class="comment-form">
+
+						
+							<div class="gazette-heading">
+								<h4 class="font-bold">Deja tu comentario</h4>
+							</div>
+							<form method="POST">
+								{% csrf_token %}
+								{{ form_comentario }}
+								
+								<button class="btn btn-success" style="background-color:darkred;" type="submit">Enviar
+									Comentario</button>
+							</form>
+							
+						</div>
+					</div>
+
+				</div>
+			</div>
+		
+	</section>
+	{% endif %}
 
 	{% endblock %}

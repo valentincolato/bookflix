@@ -1,0 +1,63 @@
+{% extends 'admin/base_site.html' %}
+
+{% load static %}
+
+
+
+
+{% block object-tools %}
+
+<div>
+    <h2>Informe usuario</h2>
+    <div class="titles" style="width: 50%;">
+        Por favor seleccione el rango de fechas 
+    </div>
+    <form  method="POST">
+        
+        <label>Desde:</label>
+        <input type="date" name="fechaDesde" required="True">
+        <label>Hasta:</label>
+        <input type="date" name="fechaHasta" required="True">
+        <button type="submit">Generar informe</button>
+        {% csrf_token %}
+    </form>
+</div>
+
+<table>
+   
+        <h1>Usuarios </h1>
+   
+    <thead>
+        <tr>
+            <th scope="col">
+                <div class="text">Username</div>
+                <div class="clear"></div>
+            </th>
+   
+
+            <th scope="col">
+                <div class="text">|</div>
+                <div class="clear"></div>
+            </th>
+            <th scope="col">
+                <div class="text">Fecha de Registro</div>
+                <div class="clear"></div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for each in usuarios %}
+            <tr class="model-user">
+                <th scope="row"><a href="auth/user/{{each.id}}/change">{{each.username}}</a></th>
+              
+                <th scope="row"><div class="text">|</div><div class="clear"></div></th>
+                <th scope="row">{{each.date_joined}}</th>
+                <td>&nbsp;</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+{% endblock %}

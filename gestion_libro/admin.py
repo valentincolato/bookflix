@@ -23,6 +23,8 @@ class LibroAdmin(admin.ModelAdmin):
 		pdfPrincipal= libro.pdf
 		nuevoCap= libro.nuevo_capitulo
 		if pdfPrincipal and nuevoCap:
+			cant_pages = (PdfFileReader(open(str(libro.pdf),"rb"))).getNumPages()
+			libro.capitulos = libro.capitulos+ str(cant_pages + 1)  + ',' 
 			merger = PdfFileMerger()
 			merger.append(pdfPrincipal)
 			merger.append(nuevoCap)

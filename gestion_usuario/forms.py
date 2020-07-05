@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile,Comentario
 
 
 # Extendemos del original
@@ -49,3 +49,13 @@ class ProfileCreateForm(forms.ModelForm):
         exclude = ('user', 'soyPrincipal')
 
         
+
+class CommentCreateForm(forms.ModelForm):
+    texto= forms.CharField(required=True,label='Comentario')
+
+    class Meta:
+        model = Comentario
+        fields = [
+            "texto"
+        ]
+        exclude = ('perfil','libro','fecha' )

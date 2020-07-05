@@ -1,0 +1,63 @@
+{% extends 'admin/base_site.html' %}
+
+{% load static %}
+
+
+
+
+{% block object-tools %}
+
+<div>
+    <h2>Informe libros</h2>
+    <div class="titles" style="width: 50%;">
+        Por favor seleccione el rango de fechas 
+    </div>
+    <form  method="POST">
+        
+        <label>Desde:</label>
+        <input type="date" name="fechaDesde" required="True">
+        <label>Hasta:</label>
+        <input type="date" name="fechaHasta" required="True">
+        <button type="submit">Generar informe</button>
+        {% csrf_token %}
+    </form>
+</div>
+
+<table>
+   
+        <h1>Libros </h1>
+   
+    <thead>
+        <tr>
+            <th scope="col">
+                <div class="text">Libro</div>
+                <div class="clear"></div>
+            </th>
+   
+
+            <th scope="col">
+                <div class="text">|</div>
+                <div class="clear"></div>
+            </th>
+            <th scope="col">
+                <div class="text">Cantidad vistas</div>
+                <div class="clear"></div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for each in libros %}
+            <tr class="model-user">
+                <th scope="row"><a href="/gestion_libro/libro/{{each.id}}/change">{{each.0}}</a></th>
+              
+                <th scope="row"><div class="text">|</div><div class="clear"></div></th>
+                <th scope="row">{{each.1}}</th>
+                <td>&nbsp;</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+{% endblock %}

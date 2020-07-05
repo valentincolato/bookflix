@@ -1,0 +1,89 @@
+/* [Master Stylesheet] */
+
+/* ------------- Index of Stylesheet -------------
+:: 1.0 Import Web Fonts
+:: 2.0 Import All CSS
+:: 3.0 Common/Base CSS
+:: 4.0 Header Area CSS
+    :: 4.1.0 Top Header Area CSS
+    :: 4.2.0 Middle Header Area CSS
+    :: 4.3.0 Bottom Header Area CSS 
+:: 5.0 Welocome Post Area CSS
+:: 6.0 News Marquee Area CSS
+:: 7.0 Sidebar Area CSS
+:: 8.0 Post Area CSS
+:: 9.0 Video Post Area CSS
+:: 10.0 Editorial Post Area CSS
+:: 11.0 Catagory Area CSS
+:: 12.0 About Us Area CSS
+:: 13.0 Contact Area CSS
+:: 14.0 Footer Area CSS
+------------------------------------------------ */
+
+/* --------------------
+:: 1.0 Import Web Fonts
+-------------------- */
+
+@import url('https://fonts.googleapis.com/css?family=PT+Serif:400,700|Roboto:300,400,500,700');
+/* ------------------
+:: 2.0 Import All CSS
+------------------ */
+
+
+/* -------------------
+:: 3.0 Common/Base CSS
+------------------- */
+
+
+.comment-img {
+    height: auto;
+    max-width: 100%;
+}
+
+.comment-wrapper {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 70px;
+    border-radius: 6px;
+}
+
+.comment-author {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 70px;
+    flex: 0 0 70px;
+    max-width: 70px;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+
+.comment-author img {
+    border-radius: 50%
+}
+
+.comment-content {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% - 70px);
+    flex: 0 0 calc(100% - 70px);
+    max-width: calc(100% - 70px);
+}
+
+.comment-content h5 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.comment-content span {
+    font-size: 14px;
+    margin: 0;
+}
+
+.comment-content p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 25px 0;
+}
+
+.comment_area ol li ol li .comment-wrapper {
+    margin-left: 100px;
+}
+
