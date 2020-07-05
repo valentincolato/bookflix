@@ -69,7 +69,7 @@ Help
 
 
 	</section>
-	{% if termino_lectura  %}
+	
 
 	<section class="about-mf sect-pt4 route  gazette-post-discussion-area section_padding_100 ">
 		
@@ -108,7 +108,7 @@ Help
 						</ol>
 					</div>
 
-
+					{% if termino_lectura  %}
 					<!-- Leave A Comment -->
 					<div class="leave-comment-area clearfix">
 						<div class="comment-form">
@@ -127,11 +127,12 @@ Help
 							
 						</div>
 					</div>
+					{% endif %}
 
 				</div>
 			</div>
 		
 	</section>
-	{% endif %}
+	
 
 	{% endblock %}
