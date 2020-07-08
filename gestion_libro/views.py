@@ -251,16 +251,14 @@ def add_capitulo(request, id_libro):
 		"superaste_el_maximo": superaste_el_maximo}
 	return render(request, 'admin/add_capitulo.html', context)
 
-def existe_cap(numero_de_capitulo,libro):
+def existe_cap(numero_de_capitulo,id_capitulo, libro):
 	capitulos = Capitulo.objects.filter(libro=libro)
 	suma=0
 	for capitulo in capitulos:
-		if int(capitulo.numero_de_capitulo) == int(numero_de_capitulo):
-	
+		if (id_capitulo != int(capitulo.id) and (capitulo.numero_de_capitulo) == numero_de_capitulo):
 			suma+=1
 
 	return suma
-
 
 @ staff_member_required
 def edit_capitulo(request, id_capitulo):
@@ -274,7 +272,7 @@ def edit_capitulo(request, id_capitulo):
 		
 	
 		if form.is_valid():
-			if (existe_cap(int(request.POST['numero_de_capitulo']),capitulo.libro)>1):
+			if (existe_cap(int(request.POST['numero_de_capitulo']),id_capitulo,capitulo.libro)==1):
 				ya_existe=True
 			else:
 				if int(request.POST['numero_de_capitulo']) <= capitulo.libro.numero_de_capitulos:
