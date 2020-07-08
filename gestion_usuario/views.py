@@ -261,7 +261,8 @@ def informe_usuario(request):
         if (fecha_inicio <= fecha_fin):
             usuarios = list(filter(lambda usuario: (str(usuario.date_joined.strftime("%Y-%m-%d")) >= str(fecha_inicio)
                                                     and (str(usuario.date_joined.strftime("%Y-%m-%d")) <= str(fecha_fin))), User.objects.all()))
-    else: fecha_invalida=True
+        else: 
+            fecha_invalida=True
 
     return render(request, 'admin/informe_usuario.html', {"usuarios": usuarios, "fecha_invalida":fecha_invalida})
 

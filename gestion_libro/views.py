@@ -70,7 +70,7 @@ def libro_especifico(request, libroId):
 		agregar_a_historial(libroId, profile_session(request))
 		if l.es_capitulado:
 			try:
-				caps = Capitulo.objects.filter(libro=l).order_by('-numero_de_capitulo')
+				caps = Capitulo.objects.filter(libro=l).order_by('numero_de_capitulo')
 			except ObjectDoesNotExist:
 				caps=[]
 		contexto = {"libro": l, "favorito": fav, "capitulos": caps,
