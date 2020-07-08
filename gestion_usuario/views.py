@@ -196,26 +196,17 @@ def profile(request):
         "fecha_nacimiento": instance_profile.fecha_nacimiento,
         "nickname": instance_profile.nickname,
         "soyPrincipal": instance_profile.soyPrincipal,
-        "foto_perfil": (str(instance_profile.foto).split('static/'))[1]
+        "foto_perfil": instance_profile.foto
     }
     return render(request, "gestion_usuario/profile.html", context)
 
 
-def fotos_perfiles(id):
-    perfiles = Profile.objects.filter(user=id)
-    fotos_perfiles = list(map(lambda perfil: (
-        perfil.id, ((str(perfil.foto)).split('static/'))[1]), perfiles))
-    fotos_dict = {}
-    for foto_perfil in fotos_perfiles:
-        fotos_dict[foto_perfil[0]] = foto_perfil[1]
-    return fotos_dict
 
 
 @login_required
 def change_profile_view(request):
     perfiles = Profile.objects.filter(user=request.user)
-    context = {"estoy_en_home": True, "perfiles": perfiles,
-               "fotos_perfiles": fotos_perfiles(request.user.id)}
+    context = {"estoy_en_home": True, "perfiles": perfiles}
     return render(request, "gestion_usuario/change_profile.html", context)
 
 

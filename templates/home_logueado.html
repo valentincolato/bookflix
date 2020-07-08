@@ -55,14 +55,10 @@ Libro
                 <div class="carousel">
                   {% for libro in libros %}
                   <div class="libro">
-                    {% for key, value in fotos_libros.items %}
-                    {% ifequal key libro.id %}
-                    {% static "" as baseUrl %}
-                    <a href="/libro/{{libro.id}}"><img src="{{ baseUrl }}{{value}}" alt="" weight="300"
+                
+                    <a href="/libro/{{libro.id}}"><img src="../{{libro.foto}}" alt="" weight="300"
                         height="200"></a>
-                    {% endifequal %}
-
-                    {% endfor %}
+                
                   </div>
                   {% endfor %}
                 </div>
@@ -90,14 +86,10 @@ Libro
                 <div class="carousel">
                   {% for fav in libros_favoritos %}
                   <div class="libro">
-                    {% for key, value in fotos_libros.items %}
-                    {% ifequal key fav.libro.id %}
-                    {% static "" as baseUrl %}
-                    <a href="/libro/{{fav.libro.id}}"><img src="{{ baseUrl }}{{value}}" alt="" weight="300"
+   
+                    <a href="/libro/{{fav.libro.id}}"><img src="../{{fav.libro.foto}}"  alt="" weight="300"
                         height="200"></a>
-                    {% endifequal %}
-
-                    {% endfor %}
+               
                   </div>
                   {% endfor %}
                 </div>
