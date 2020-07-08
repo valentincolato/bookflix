@@ -281,6 +281,7 @@ def borrar_comentario(request, id):
 
 @login_required
 def terminar_lectura(request, libro_id):
+    
     try:
         lectura = Leidos.objects.get(libro=libro_id,perfil=request.session['perfil'])
     except ObjectDoesNotExist:
