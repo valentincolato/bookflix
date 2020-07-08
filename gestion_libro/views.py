@@ -256,9 +256,9 @@ def existe_cap(numero_de_capitulo,id_capitulo, libro):
 	suma=0
 	for capitulo in capitulos:
 		if (id_capitulo != int(capitulo.id) and (capitulo.numero_de_capitulo) == numero_de_capitulo):
-			suma+=1
+			return True
 
-	return suma
+	return False
 
 @ staff_member_required
 def edit_capitulo(request, id_capitulo):
@@ -272,7 +272,7 @@ def edit_capitulo(request, id_capitulo):
 		
 	
 		if form.is_valid():
-			if (existe_cap(int(request.POST['numero_de_capitulo']),id_capitulo,capitulo.libro)==1):
+			if (existe_cap(int(request.POST['numero_de_capitulo']),id_capitulo,capitulo.libro)):
 				ya_existe=True
 			else:
 				if int(request.POST['numero_de_capitulo']) <= capitulo.libro.numero_de_capitulos:
