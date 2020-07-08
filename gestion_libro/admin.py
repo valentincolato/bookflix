@@ -1,44 +1,42 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 import os
-from gestion_libro.models import Autor,Genero,Editorial,Libro
+from gestion_libro.models import Autor, Genero, Editorial, Libro,Capitulo
 from PyPDF2 import PdfFileMerger, PdfFileReader
 import random
-
+from .forms import CapituloForm
+from django.core.exceptions import ObjectDoesNotExist
 # Register your models here.
 # Register your models here.
 admin.site.register(Autor)
 admin.site.register(Genero)
 admin.site.register(Editorial)
+
+
 @admin.register(Libro)
 class LibroAdmin(admin.ModelAdmin):
-	change_form_template = "libro_changeform.html"
-	def response_change(self, request, obj):
-		if "_make-unique" in request.POST:
-			self.agregar_cap(request,obj)
-			return HttpResponseRedirect(".")
-		return super().response_change(request, obj)
-	def agregar_cap(self,request,libro):
+    change_form_template = "libro_changeform.html"
 
-		pdfPrincipal= libro.pdf
-		nuevoCap= libro.nuevo_capitulo
-		if pdfPrincipal and nuevoCap:
-			cant_pages = (PdfFileReader(open(str(libro.pdf),"rb"))).getNumPages()
-			libro.capitulos = libro.capitulos+ str(cant_pages + 1)  + ',' 
-			merger = PdfFileMerger()
-			merger.append(pdfPrincipal)
-			merger.append(nuevoCap)
-			random_num=str(random.randint(1,100000))
-			merger.write('static/pdf/' + libro.nombre + random_num +  '.pdf')
-			libro.pdf='static/pdf/' + libro.nombre+ random_num + '.pdf'
-			libro.nuevo_capitulo=None
-			merger.close()
-			libro.save()
-			self.message_user(request, "Capítulo agregado.")
-		elif nuevoCap:
-			libro.pdf=nuevoCap
-			libro.nuevo_capitulo=None
-			libro.save()
-			self.message_user(request, "El nuevo capitulo ha estrenado tu libro!" )
-		else:
-			self.message_user(request, "No se puedo agregar capitulo")
+    def render_change_form(self, request, context, *args, **kwargs):
+        self.change_form_template = "libro_changeform.html"
+        libro =context['original']
+        
+        try:
+            capitulos =Capitulo.objects.filter(libro=libro).order_by('-numero_de_capitulo')
+        except ObjectDoesNotExist:
+            capitulos =[]
+       
+        extra = {'capitulos': capitulos, "libro_id":libro.id}
+        context.update(extra)
+        return super(LibroAdmin, self).render_change_form(request,
+                                                            context, *args, **kwargs)
+
+
+class CapituloAdmin(admin.ModelAdmin):
+       list_display = ("numero_de_capitulo", "pdf")
+
+       def get_form(self, request, obj=None, **kwargs):
+           if obj.type == "1":
+               self.exclude = ("libro", )
+           form = super(Capitulo, self).get_form(request, obj, **kwargs)
+           return form

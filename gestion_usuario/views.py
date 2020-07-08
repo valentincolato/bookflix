@@ -15,7 +15,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View
 from gestion_noticia.views import noticias, ultimas_noticias
 from gestion_pago.models import Tarjeta
-from gestion_libro.models import Libro
+from gestion_libro.models import Libro,Capitulo
+from .models import  CapitulosLeidos
 from django.http import HttpResponse, HttpResponseRedirect
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -196,26 +197,17 @@ def profile(request):
         "fecha_nacimiento": instance_profile.fecha_nacimiento,
         "nickname": instance_profile.nickname,
         "soyPrincipal": instance_profile.soyPrincipal,
-        "foto_perfil": (str(instance_profile.foto).split('static/'))[1]
+        "foto_perfil": instance_profile.foto
     }
     return render(request, "gestion_usuario/profile.html", context)
 
 
-def fotos_perfiles(id):
-    perfiles = Profile.objects.filter(user=id)
-    fotos_perfiles = list(map(lambda perfil: (
-        perfil.id, ((str(perfil.foto)).split('static/'))[1]), perfiles))
-    fotos_dict = {}
-    for foto_perfil in fotos_perfiles:
-        fotos_dict[foto_perfil[0]] = foto_perfil[1]
-    return fotos_dict
 
 
 @login_required
 def change_profile_view(request):
     perfiles = Profile.objects.filter(user=request.user)
-    context = {"estoy_en_home": True, "perfiles": perfiles,
-               "fotos_perfiles": fotos_perfiles(request.user.id)}
+    context = {"estoy_en_home": True, "perfiles": perfiles}
     return render(request, "gestion_usuario/change_profile.html", context)
 
 
@@ -260,7 +252,7 @@ def index(request):
 @staff_member_required
 def informe_usuario(request):
     usuarios = []
-
+    fecha_invalida=False
     if request.method == 'POST':
         print(request.POST)
 
@@ -269,8 +261,10 @@ def informe_usuario(request):
         if (fecha_inicio <= fecha_fin):
             usuarios = list(filter(lambda usuario: (str(usuario.date_joined.strftime("%Y-%m-%d")) >= str(fecha_inicio)
                                                     and (str(usuario.date_joined.strftime("%Y-%m-%d")) <= str(fecha_fin))), User.objects.all()))
+        else: 
+            fecha_invalida=True
 
-    return render(request, 'admin/informe_usuario.html', {"usuarios": usuarios})
+    return render(request, 'admin/informe_usuario.html', {"usuarios": usuarios, "fecha_invalida":fecha_invalida})
 
 
 @login_required
@@ -294,6 +288,51 @@ def terminar_lectura(request, libro_id):
         lectura.libro = Libro.objects.get(id=libro_id)
         lectura.perfil =  Profile.objects.get(id=request.session['perfil'])
         lectura.save()
+
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def terminar_capitulo(request, id_libro):
+    libro = Libro.objects.get(id=id_libro)
+    esta_disponible= True
+    try:
+    
+        capitulos_leidos = CapitulosLeidos.objects.get(libro=libro,perfil=request.session['perfil'])
+    except ObjectDoesNotExist:
+        capitulos_leidos = CapitulosLeidos()
+        capitulos_leidos.libro= libro
+        capitulos_leidos.perfil= Profile.objects.get(id=request.session['perfil'])
+        capitulos_leidos.numero_capitulo_leido=1
+        capitulos_leidos.save()
+    
+    #esta_disponible el pdf del capitulo?
+    try:
+        capitulo = Capitulo.objects.get(numero_de_capitulo = capitulos_leidos.numero_capitulo_leido, libro = libro)
+    except ObjectDoesNotExist:
+        esta_disponible=False
+        
+    
+    esta_disponible= (esta_disponible) and (capitulo.pdf) != ''
+           
+    if not esta_disponible:
+        url = request.META.get('HTTP_REFERER')
+        resp_body = '<script>alert("No se puede terminar la lectura del capitulo porque no esta disponible");\
+                        window.location="%s"</script>' % url
+
+        return HttpResponse(resp_body)
+        
+
+    if capitulos_leidos.numero_capitulo_leido < libro.numero_de_capitulos:
+        capitulos_leidos.numero_capitulo_leido +=1
+   
+   
+    capitulos_leidos.save()
+    if capitulos_leidos.numero_capitulo_leido == libro.numero_de_capitulos:
+        return redirect('/libro/terminar_lectura/%s' % str(id_libro))
+
+
 
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

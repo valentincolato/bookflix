@@ -1,13 +1,51 @@
 {% extends 'admin/change_form.html' %}
 
-{% block submit_buttons_bottom %}
-    {{ block.super }}
-    <div  class="submit-row" style="position: absolute;
-									left: 80%;
-									top: 47rem;
-									background: none;
-									border: none;
-									">
-		<input type="submit" value="Agregar Capitulo" name="_make-unique">
-    </div>
+{% block  field_sets %}
+{{ block.super }}
+<form method="POST">
+	<fieldset class="module aligned ">
+
+
+
+		<div class="form-row field-pdf">
+
+
+		</div>
+
+		<div class="form-row field-capitulo">
+
+
+			<div>
+
+
+				<label for="id_capitulo">Capitulos:</label>
+
+				<div class="related-widget-wrapper">
+					<select name="capitulo" id="id_capitulo">
+						<option value="" selected>---------</option>
+						{% for capitulo in capitulos %}
+						<option value={{capitulo.id}}>Numero de capitulo: {{capitulo}}</option>
+						{% endfor %}
+
+
+
+					</select>
+
+					<a class="related-widget-wrapper-link change-related" id="change_id_libro"
+						data-href-template="/admin/gestion_libro/editar_capitulo/__fk__"
+						title="Modificar capitulo seleccionados/as"><img src="/static/admin/img/icon-changelink.svg"
+							alt="Modificar"></a><a class="related-widget-wrapper-link add-related" id="add_id_capitulo"
+						href="/admin/gestion_libro/agregar_capitulo/{{libro_id}}"
+						title="Agregar otro/a capitulo"><img src="/static/admin/img/icon-addlink.svg" alt="Agregar"></a>
+
+				</div>
+
+
+
+			</div>
+
+		</div>
+
+	</fieldset>
+</form>
 {% endblock %}
