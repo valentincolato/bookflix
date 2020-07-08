@@ -11,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 admin.site.register(Autor)
 admin.site.register(Genero)
 admin.site.register(Editorial)
-admin.site.register(Capitulo)
+
 
 @admin.register(Libro)
 class LibroAdmin(admin.ModelAdmin):

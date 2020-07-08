@@ -37,7 +37,7 @@ class Libro(models.Model):
 	foto=models.ImageField(upload_to='static/foto_libro',blank=True, null=True)
 	pdf=models.FileField(upload_to='static/pdf',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
 	es_capitulado = models.BooleanField(default=False)
-	numero_de_capitulos= models.IntegerField(default=0,validators=[MinValueValidator(int('0'))])
+	numero_de_capitulos= models.IntegerField(default=0,validators=[MinValueValidator(int('1'))])
 	
 	
 	def __str__(self):

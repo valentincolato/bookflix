@@ -12,6 +12,11 @@
     <div class="titles" style="width: 50%;">
         Por favor seleccione el rango de fechas 
     </div>
+    {% if fecha_invalida %}
+            <ul class="errorlist">
+                <li>La fecha ingresada no es valida</li>
+            </ul>
+    {% endif %}
     <form  method="POST">
         
         <label>Desde:</label>

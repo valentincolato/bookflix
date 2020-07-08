@@ -41,10 +41,9 @@
                 <li>El numero que ingresaste de capitulo es mayor a la cantidad de capitulos que tiene el libro</li>
             </ul>
             {% endif %}
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+            <form method="POST" enctype="multipart/form-data">                
                 {{form.as_p}}
-
+                {% csrf_token %}
                 <input type="submit" value="Guardar">
 
 

@@ -4,11 +4,11 @@ import random
 from gestion_pago.models import Tarjeta
 
 # from ..\gestion_pago.models import Tarjeta
-from gestion_libro.models import Libro
+from gestion_libro.models import Libro,Capitulo
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.core.validators import MinValueValidator 
 
 
 class Profile(models.Model):
@@ -47,7 +47,6 @@ class Historial(models.Model):
     def __str__(self):
         return 'de %s' % (self.perfil)
 
-
 class Leidos(models.Model):
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     perfil = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -55,6 +54,14 @@ class Leidos(models.Model):
 
     def __str__(self):
         return 'de %s' % (self.libro)
+
+class CapitulosLeidos(models.Model):
+    perfil = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    numero_capitulo_leido = models.IntegerField(default=0,validators=[MinValueValidator(int('0'))])
+    libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return 'de %s' % (self.perfil)
 
 class Favorito(models.Model):
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)

@@ -28,26 +28,43 @@ Help
 					<br />
 					<p> Cantidad de capitulos: {{libro.cant_capitulos}}</p>
 					<div class="row">
-						{% if libro.pdf %}
-						<a class="btn btn-secondary col-sm-2 " href="../{{ libro.pdf }}"> Comenzar a leer</a>
-						
+						{% if not libro.es_capitulado  %}
+							{% if libro.pdf %}
+							<a class="btn btn-danger col-sm-2 " href="../{{ libro.pdf }}"> Comenzar a leer</a>
+							{% endif %}
+							{% if not termino_lectura  %}
+							<a style='margin-left: 30px; 'class="btn btn-danger col-sm-2 " href="terminar_lectura/{{libro.id}}">Terminar lectura</a>
+							{% endif %}
+						{% else %}
 						{% if capitulos %}
 						<div class="dropdown ">
-							<button style='margin-left: 20px; margin-right: 10px;' class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+							<button style='margin-left: 20px; margin-right: 10px;' class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Capitulos
+								Comenzar a leer 
 							</button>
-							<div class="dropdown-menu">
+							<div class="dropdown-menu col-sm-2 ">
 								{% for cap in capitulos %}
-								<a class="dropdown-item" href="../{{ libro.pdf}}#page={{cap}}">Capitulo
-									{{forloop.counter}}</a>
+									{% if cap.pdf %}
+										
+										<a class="dropdown-item  col-sm-2" href="../{{cap.pdf}}">Capitulo
+											{{cap.numero_de_capitulo}}</a>
+
+									{%else %}
+									<a class="dropdown-item " href="">Capitulo
+										 no disponible</a>
+									{% endif %}
 								{%endfor%}
+
+								
 							</div>
 						</div>
+								{% if not termino_lectura  %}
+
+								<a style='margin-left: 20px; margin-left: 0px;'class="btn btn-danger col-sm-2 " href="terminar_capitulo/{{libro.id}}">Terminar lectura capitulo {{capitulo_actual}}</a>
+								{% endif %}
 						{% endif %}
-						{% if not termino_lectura  %}
-						<a style='margin-left: 20px; margin-left: 0px;'class="btn btn-danger col-sm-2 " href="terminar_lectura/{{libro.id}}">Terminar lectura</a>
-						{% endif %}
+						
+						
 						{% endif %}
 					</div>
 					
@@ -69,7 +86,7 @@ Help
 
 
 	</section>
-	{% if termino_lectura  %}
+	
 
 	<section class="about-mf sect-pt4 route  gazette-post-discussion-area section_padding_100 ">
 		
@@ -108,6 +125,7 @@ Help
 						</ol>
 					</div>
 
+					{% if termino_lectura  %}
 
 					<!-- Leave A Comment -->
 					<div class="leave-comment-area clearfix">
@@ -127,11 +145,12 @@ Help
 							
 						</div>
 					</div>
+					{% endif %}
 
 				</div>
 			</div>
 		
 	</section>
-	{% endif %}
+	
 
 	{% endblock %}

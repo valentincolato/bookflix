@@ -29,10 +29,10 @@
         <h1>Agregar capitulo</h1>
         <div id="content-main">
 
-            
+
             {% if ya_existe %}
             <ul class="errorlist">
-                <li>Ya existe un capitulo  con el mismo numero</li>
+                <li>Ya existe un capitulo con el mismo numero</li>
             </ul>
             {% endif %}
             {% if superaste_el_maximo %}
@@ -41,17 +41,16 @@
             </ul>
             {% endif %}
             <form method="POST" enctype="multipart/form-data">
+
                 {% csrf_token %}
                 {{form.as_p}}
+
 
                 <input type="submit" value="Guardar">
 
 
             </form>
-        </div>
-    </div>
-
-
+    
 
 </body>
 <!-- END Container -->
