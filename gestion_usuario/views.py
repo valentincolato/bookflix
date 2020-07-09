@@ -18,6 +18,7 @@ from gestion_pago.models import Tarjeta
 from gestion_libro.models import Libro,Capitulo
 from .models import  CapitulosLeidos
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -281,7 +282,6 @@ def borrar_comentario(request, id):
 
 @login_required
 def terminar_lectura(request, libro_id):
-    
     try:
         lectura = Leidos.objects.get(libro=libro_id,perfil=request.session['perfil'])
     except ObjectDoesNotExist:
@@ -295,45 +295,25 @@ def terminar_lectura(request, libro_id):
 
 
 @login_required
-def terminar_capitulo(request, id_libro):
-    libro = Libro.objects.get(id=id_libro)
+def terminar_capitulo(request, capitulo_id):
+    cap = Capitulo.objects.get(id=capitulo_id)
     esta_disponible= True
     try:
-    
-        capitulos_leidos = CapitulosLeidos.objects.get(libro=libro,perfil=request.session['perfil'])
+        capitulos_leidos = CapitulosLeidos.objects.get(capitulo=cap,perfil=request.session['perfil'])
+        messages.error(request, 'Ya has terminado este capitulo.')
     except ObjectDoesNotExist:
         capitulos_leidos = CapitulosLeidos()
-        capitulos_leidos.libro= libro
         capitulos_leidos.perfil= Profile.objects.get(id=request.session['perfil'])
+        capitulos_leidos.capitulo = cap
+        #Van a volar
+        capitulos_leidos.libro = cap.libro
         capitulos_leidos.numero_capitulo_leido=1
+
         capitulos_leidos.save()
-    
-    #esta_disponible el pdf del capitulo?
-    try:
-        capitulo = Capitulo.objects.get(numero_de_capitulo = capitulos_leidos.numero_capitulo_leido, libro = libro)
-    except ObjectDoesNotExist:
-        esta_disponible=False
-        
-    
-    esta_disponible= (esta_disponible) and (capitulo.pdf) != ''
-           
-    if not esta_disponible:
-        url = request.META.get('HTTP_REFERER')
-        resp_body = '<script>alert("No se puede terminar la lectura del capitulo porque no esta disponible");\
-                        window.location="%s"</script>' % url
-
-        return HttpResponse(resp_body)
-        
-
-    if capitulos_leidos.numero_capitulo_leido < libro.numero_de_capitulos:
-        capitulos_leidos.numero_capitulo_leido +=1
-   
-   
-    capitulos_leidos.save()
-    if capitulos_leidos.numero_capitulo_leido == libro.numero_de_capitulos:
-        return redirect('/libro/terminar_lectura/%s' % str(id_libro))
-
-
-
-
+        messages.success(request, 'Has terminado el capitulo!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def capitulo_terminado(request):
+    messages.warning(request, 'Ya has terminado este capitulo.')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+

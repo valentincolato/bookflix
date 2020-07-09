@@ -28,8 +28,6 @@
 
         <h1>Modificar capitulo</h1>
         <div id="content-main">
-
-            
             {% if ya_existe %}
             <ul class="errorlist">
                 <li>Ya existe un capitulo  con el mismo numero</li>
@@ -41,12 +39,10 @@
                 <li>El numero que ingresaste de capitulo es mayor a la cantidad de capitulos que tiene el libro</li>
             </ul>
             {% endif %}
-            <form method="POST" enctype="multipart/form-data">                
+            <form method="POST" enctype="multipart/form-data">
                 {{form.as_p}}
                 {% csrf_token %}
                 <input type="submit" value="Guardar">
-
-
             </form>
         </div>
     </div>

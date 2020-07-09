@@ -22,15 +22,27 @@ from tika import parser
 from datetime import date
 from django.core.exceptions import ObjectDoesNotExist
 
-def capitulo_actual(request,id_libro):
-	try:
-		termino_lectura = CapitulosLeidos.objects.get(
-			libro=id_libro, perfil=request.session['perfil'])
-		cap_actual = termino_lectura.numero_capitulo_leido
-	except ObjectDoesNotExist:
-		cap_actual = 1
 
-	return cap_actual
+def termino_libro(request, libro ,capitulos):
+	capitulos_terminados = []
+	termino_lectura = True
+	if libro.es_capitulado:
+		for cap in capitulos:
+			try:
+				termino_capitulo = CapitulosLeidos.objects.get( libro=libro.id,capitulo = cap.id, perfil=request.session['perfil'])
+				capitulos_terminados.append(termino_capitulo.capitulo.id)
+			except:
+				termino_lectura = False
+		# Debe haber igual cantidad de capitulos a capitulos leidos
+		termino_lectura = termino_lectura and len(capitulos_terminados) == libro.numero_de_capitulos
+	else:
+		try:
+			Leidos.objects.get( libro=libro.id, perfil=request.session['perfil'])
+		except:
+			termino_lectura = False
+
+	return capitulos_terminados, termino_lectura
+
 def libro_no_disponible(request):
 	return render(request, "libronodisponible.html")
 
@@ -42,15 +54,6 @@ def disponibilidad_libro(libro):
 def libro_especifico(request, libroId):
 	l = Libro.objects.get(id=libroId)
 	caps = []
-
-	try:
-		termino_lectura = Leidos.objects.get(
-			libro=l.id, perfil=request.session['perfil'])
-		termino_lectura = True
-	except ObjectDoesNotExist:
-		termino_lectura = False
-
-	
 
 	form_comentario = CommentCreateForm()
 	if disponibilidad_libro(l) == False:
@@ -73,9 +76,20 @@ def libro_especifico(request, libroId):
 				caps = Capitulo.objects.filter(libro=l).order_by('numero_de_capitulo')
 			except ObjectDoesNotExist:
 				caps=[]
-		contexto = {"libro": l, "favorito": fav, "capitulos": caps,
-					"comentarios": Comentario.objects.filter(libro=l), "form_comentario": form_comentario, "termino_lectura": termino_lectura
-					,"capitulo_actual":capitulo_actual(request,l.id)}
+
+		completitud_libro = termino_libro(request, l, caps)
+		caps_terminados = completitud_libro[0]
+		termino_lectura = completitud_libro[1]
+
+		contexto = {
+								"libro": l,
+								"favorito": fav,
+								"capitulos": caps,
+								"comentarios": Comentario.objects.filter(libro=l),
+								"form_comentario": form_comentario,
+								"termino_lectura": termino_lectura,
+								"capitulos_terminados": caps_terminados
+							}
 	return render(request, "libroDetalle.html", contexto)
 
 
@@ -237,7 +251,6 @@ def add_capitulo(request, id_libro):
 
 						capitulo = form.save()
 						capitulo.libro = libro
-				
 
 						capitulo.save()
 						return HttpResponse('<script type="text/javascript">window.close()</script>')
@@ -253,9 +266,9 @@ def add_capitulo(request, id_libro):
 
 def existe_cap(numero_de_capitulo,id_capitulo, libro):
 	capitulos = Capitulo.objects.filter(libro=libro)
-	suma=0
+	suma = 0
 	for capitulo in capitulos:
-		if (id_capitulo != int(capitulo.id) and (capitulo.numero_de_capitulo) == numero_de_capitulo):
+		if (int(id_capitulo) != capitulo.id and (capitulo.numero_de_capitulo) == numero_de_capitulo):
 			return True
 
 	return False
@@ -264,13 +277,12 @@ def existe_cap(numero_de_capitulo,id_capitulo, libro):
 def edit_capitulo(request, id_capitulo):
 	superaste_el_maximo =False
 	ya_existe=False
-	
+
 	capitulo = Capitulo.objects.get(id=id_capitulo)
-	
 	if request.method == "POST":
 		form = CapituloForm(request.POST, request.FILES)
-		
-	
+
+
 		if form.is_valid():
 			if (existe_cap(int(request.POST['numero_de_capitulo']),id_capitulo,capitulo.libro)):
 				ya_existe=True
@@ -278,16 +290,12 @@ def edit_capitulo(request, id_capitulo):
 				if int(request.POST['numero_de_capitulo']) <= capitulo.libro.numero_de_capitulos:
 					form.save()
 					try:
-						capitulo.pdf = request.FILES['pdf']
+						capitulo.pdf = request.POST['pdf']
 					except:
-						pass
+						capitulo.pdf = request.FILES['pdf']
 					capitulo.numero_de_capitulo = int(request.POST['numero_de_capitulo']) 
 					capitulo.save()
 
-					
-				
-					
-					
 					return HttpResponse('<script type="text/javascript">window.close()</script>')
 				else:
 					superaste_el_maximo =True

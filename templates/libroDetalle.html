@@ -26,7 +26,7 @@ Help
 					<br />
 					<p> Autor: {{libro.autor.nombre}}</p>
 					<br />
-					<p> Cantidad de capitulos: {{libro.cant_capitulos}}</p>
+					<p> Cantidad de capitulos: {{libro.numero_de_capitulos}}</p>
 					<div class="row">
 						{% if not libro.es_capitulado  %}
 							{% if libro.pdf %}
@@ -36,39 +36,48 @@ Help
 							<a style='margin-left: 30px; 'class="btn btn-danger col-sm-2 " href="terminar_lectura/{{libro.id}}">Terminar lectura</a>
 							{% endif %}
 						{% else %}
-						{% if capitulos %}
-						<div class="dropdown ">
-							<button style='margin-left: 20px; margin-right: 10px;' class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton"
-								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Comenzar a leer 
-							</button>
-							<div class="dropdown-menu col-sm-2 ">
-								{% for cap in capitulos %}
-									{% if cap.pdf %}
-										
-										<a class="dropdown-item  col-sm-2" href="../{{cap.pdf}}">Capitulo
-											{{cap.numero_de_capitulo}}</a>
+							{% if capitulos %}
+							<div class="dropdown ">
+								<button style='margin-left: 20px; margin-right: 10px;' class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton"
+									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Comenzar a leer 
+								</button>
+								<div class="dropdown-menu col-sm-2 ">
+									{% for cap in capitulos %}
+										{% if cap.pdf %}
+											<a class="dropdown-item  col-sm-2" href="../{{cap.pdf}}">Capitulo
+												{{cap.numero_de_capitulo}}</a>
 
-									{%else %}
-									<a class="dropdown-item " href="">Capitulo
-										 no disponible</a>
-									{% endif %}
-								{%endfor%}
-
-								
+										{%else %}
+										<a class="dropdown-item " href="">Capitulo
+											no disponible</a>
+										{% endif %}
+									{%endfor%}
+								</div>
 							</div>
-						</div>
-								{% if not termino_lectura  %}
+									{% if not termino_lectura  %}
+										<div class="dropdown ">
+											<button style='margin-left: 20px; margin-right: 10px;' class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton"
+												data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												Terminar Capitulo
+											</button>
+											<div class="dropdown-menu">
+												{% for cap in capitulos %}
+													{% if cap.id in capitulos_terminados %}
+													<a class="dropdown-item col-sm-12" href="capitulo_terminado" style="color:grey">Capitulo {{cap.numero_de_capitulo}}</a>
+													{% else %}
+														<a class="dropdown-item col-sm-12" href="terminar_capitulo/{{cap.id}}">Capitulo {{cap.numero_de_capitulo}}</a>
+													{% endif %}
+												{% endfor %}
+											</div>
+										</div>
+									{% else %}
+										<p> Has terminado el libro, felicidades!</p>
+									{% endif %}
 
-								<a style='margin-left: 20px; margin-left: 0px;'class="btn btn-danger col-sm-2 " href="terminar_capitulo/{{libro.id}}">Terminar lectura capitulo {{capitulo_actual}}</a>
-								{% endif %}
-						{% endif %}
-						
-						
+							{% endif %}
 						{% endif %}
 					</div>
-					
-					
 					<p>Cantidad de paginas: {{libro.cant_paginas}}</p>
 					<br />
 					<p> Genero: </p>
@@ -108,16 +117,12 @@ Help
 										<img class= "comment-img"src="../{{comentario.perfil.foto}}">
 									</div>
 									<!-- Comment Content -->
-									
 									<div class="comment-content">
-										
 										<h5>{{comentario.perfil.nickname}}</h5>
 										<span class="comment-date font-pt">{{comentario.fecha}} {% if comentario.perfil.id == request.session.perfil %}
 											<button style='margin-left: 500px;' class='btn  btn-danger' type="reset" onclick="window.location.href = 'borrar_comentario/{{comentario.id}}'">Borrar</button>
 											{% endif %} </span>
 										<p>{{comentario.texto}}</p>
-										
-
 									</div>
 								</div>
 							</li>
@@ -129,27 +134,21 @@ Help
 					<!-- Leave A Comment -->
 					<div class="leave-comment-area clearfix">
 						<div class="comment-form">
-
-						
 							<div class="gazette-heading">
 								<h4 class="font-bold">Deja tu comentario</h4>
 							</div>
 							<form method="POST">
 								{% csrf_token %}
 								{{ form_comentario }}
-								
 								<button class="btn btn-success" style="background-color:darkred;" type="submit">Enviar
 									Comentario</button>
 							</form>
-							
 						</div>
 					</div>
 					{% endif %}
 
 				</div>
 			</div>
-		
 	</section>
-	
 
 	{% endblock %}

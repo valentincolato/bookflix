@@ -35,11 +35,9 @@ class Libro(models.Model):
 	fecha_vencimiento = models.DateField(null=True,blank=True)
 	ocultar= models.BooleanField(default=False)
 	foto=models.ImageField(upload_to='static/foto_libro',blank=True, null=True)
-	pdf=models.FileField(upload_to='static/pdf',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+	pdf=models.FileField(upload_to='static/pdf',editable = False,blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
 	es_capitulado = models.BooleanField(default=False)
-	numero_de_capitulos= models.IntegerField(default=0,validators=[MinValueValidator(int('1'))])
-	
-	
+	numero_de_capitulos= models.IntegerField(default=0,editable = False, validators=[MinValueValidator(int('1'))])
 	def __str__(self):
 		return '%s : %s' % (self.nombre, self.autor)
 
@@ -50,7 +48,7 @@ class Libro(models.Model):
 '''
 class Capitulo(models.Model):
 	numero_de_capitulo= models.IntegerField(validators=[MinValueValidator(int('0'))])
-	pdf=models.FileField(upload_to='static/pdf/capitulos/',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+	pdf = models.FileField(upload_to='static/pdf/capitulos/',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
 	libro = models.ForeignKey(Libro, on_delete=models.CASCADE,null=True,blank=True,editable = False)
 	def __str__(self):
 		return '%s' % (self.numero_de_capitulo)
