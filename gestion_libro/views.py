@@ -2,18 +2,18 @@ from django.shortcuts import render, redirect
 from django.http import FileResponse, Http404
 from .models import Libro, Capitulo
 from .forms import CapituloForm
-from reportlab.pdfgen import canvas
+# from reportlab.pdfgen import canvas
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 import os
-from django.db.models import Q  # new
+from django.db.models import Q  
 from django.views.generic import TemplateView, ListView
-# Create your views here.
-from gestion_noticia.models import Noticia
+
+from gestion_noticia.models import Noticia, Trailer
 from django.contrib.admin.views.decorators import staff_member_required
 
 from gestion_usuario.views import profile_session
-from gestion_usuario.models import Favorito, Historial, Comentario, Profile, Leidos,CapitulosLeidos
+from gestion_usuario.models import Favorito, Historial, Comentario, Profile, Leidos,CapitulosLeidos,Puntaje
 from gestion_usuario.forms import CommentCreateForm
 # view_pdf
 from tika import parser
@@ -56,18 +56,15 @@ def libro_especifico(request, libroId):
 	caps = []
 
 	form_comentario = CommentCreateForm()
-	if disponibilidad_libro(l) == False:
-		return redirect('/libronodisponible')
-	else:
-		if request.method == "POST":
-			form_comentario = CommentCreateForm(data=request.POST)
-			if form_comentario.is_valid():
+	if request.method == "POST":
+		form_comentario = CommentCreateForm(data=request.POST)
+		if form_comentario.is_valid():
 
-				comentario = form_comentario.save()
-				comentario.perfil = Profile.objects.get(
-					id=request.session['perfil'])
-				comentario.libro = l
-				comentario.save()
+			comentario = form_comentario.save()
+			comentario.perfil = Profile.objects.get(
+				id=request.session['perfil'])
+			comentario.libro = l
+			comentario.save()
 
 		fav = buscar_fav(request, libroId)
 		agregar_a_historial(libroId, profile_session(request))
@@ -88,7 +85,13 @@ def libro_especifico(request, libroId):
 								"comentarios": Comentario.objects.filter(libro=l),
 								"form_comentario": form_comentario,
 								"termino_lectura": termino_lectura,
-								"capitulos_terminados": caps_terminados
+								"capitulos_terminados": caps_terminados,
+								"porcentaje":porcentaje_likes(libroId),
+								"votostotales":cant_likes(libroId),
+								"trailers":Trailer.objects.filter(libro=l),
+								"disponibilidad":disponibilidad_libro(l),
+								"punt": puntuar(request, libroId, None),
+
 							}
 	return render(request, "libroDetalle.html", contexto)
 
@@ -116,6 +119,51 @@ def libro_fav(request, libroId):
 	return redirect('/libro/'+str(libroId))
 
 
+#fran
+
+def puntuar(request, libroId, puntaje):
+	try:
+		punt = (Puntaje.objects.get(libro_id=libroId, perfil_id=profile_session(request)))
+	except:
+		if puntaje == None:
+			punt=None
+		else:
+			l = Libro.objects.get(id=libroId)
+			per = profile_session(request)
+			punt = Puntaje(libro=l, perfil=per, like= puntaje)
+			punt.save()
+	return punt
+
+def dar_like(request, libroId):
+	puntuar(request, libroId,True)
+	return redirect('/libro/'+str(libroId))
+
+def dar_dislike(request, libroId):
+	puntuar(request, libroId,False)
+	return redirect('/libro/'+str(libroId))
+def borrar_puntaje(request, libroId):
+	punt=puntuar(request, libroId,True)#feo codigo
+	punt.delete()
+	return redirect('/libro/'+str(libroId))
+
+def porcentaje_likes(libroId):
+	
+	all=Puntaje.objects.filter(libro_id=libroId)
+	likes=filter(lambda x: x.like==True, all)
+	try:
+		por= (len(list(likes))/len(list(all))) * 100
+	except:
+		return 0
+	return por
+def cant_likes(libroId):
+	all=Puntaje.objects.filter(libro_id=libroId)
+	return len(list(all))
+	
+
+#endFran	
+	
+	
+	
 def agregar_a_historial(libroId, perf):
 	try:
 		his = Historial.objects.get(libro_id=libroId, perfil_id=perf)
@@ -179,7 +227,7 @@ def buscar_libros(filtro, query):
 			"autor": list(filter(lambda libro: comparar_string(query, libro.autor), Libro.objects.all())),
 			"editorial": list(filter(lambda libro: comparar_string(query, libro.editorial), Libro.objects.all())),
 		}
-	return switcher[filtro]
+	return filter(lambda libro: disponibilidad_libro(libro) ,switcher[filtro]) #Fran
 
 
 class SearchResultsView(ListView):

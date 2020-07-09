@@ -26,7 +26,8 @@ Help
 					<br />
 					<p> Autor: {{libro.autor.nombre}}</p>
 					<br />
-					<p> Cantidad de capitulos: {{libro.numero_de_capitulos}}</p>
+					<p> Cantidad de capitulos: {{libro.cant_capitulos}}</p>
+					{%if disponibilidad%}<!-- fran -->
 					<div class="row">
 						{% if not libro.es_capitulado  %}
 							{% if libro.pdf %}
@@ -78,6 +79,10 @@ Help
 							{% endif %}
 						{% endif %}
 					</div>
+						{%else%}<!-- fran -->
+						<h1>Lo sentimos pero este libro no se encuentra disponible</h1>
+						<br/>
+						{%endif%}
 					<p>Cantidad de paginas: {{libro.cant_paginas}}</p>
 					<br />
 					<p> Genero: </p>
@@ -92,6 +97,64 @@ Help
 					<p> Editorial: {{libro.editorial.nombre}}</p>
 					<a href=/fav/{{libro.id}}>{%if favorito%}Sacar{%else%}Marcar{%endif%} como favorito</a>
 
+							<!-- fran -->
+							<br/>
+							<br/>
+							{%if trailers%}
+							<div class="dropdown ">
+							<button style='margin-left: 20px; margin-right: 10px;' class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								trailers 
+							</button>
+							<div class="dropdown-menu col-sm-2 ">
+								{% for trailer in trailers %}
+										
+										<a class="dropdown-item  col-sm-2" href="/trailer/{{trailer.id}}">{{trailer.titulo}}</a>
+
+								{%endfor%}
+								</div>
+								</div>
+								{%endif%}
+							
+							<p>Puntuacion: {{porcentaje}}% de likes de un total de {{votostotales}}</p>
+							<br/>
+							<p style= "display: block">
+							{%if punt%}
+								
+								{%if punt.like%}
+
+									<i class="fa fa-thumbs-up fa_custom fa-3x"></i>
+								{%else%}
+									<i class="fa fa-thumbs-down fa_custom fa-3x"></i>
+								{%endif%}
+								<button style='margin-left: 500px;' class='btn  btn-danger' type="reset" onclick="window.location.href = '/borrarpuntaje/{{libro.id}}'">Borrar voto</button>
+								
+							{%else%}
+								<div>
+								<a href="/dislike/{{libro.id}}"><i class="fa fa-thumbs-down fa_custom fa-3x dislike"></i></a>		
+								<a href="/like/{{libro.id}}"><i class="fa fa-thumbs-up fa_custom fa-3x like"></i>	</a>
+								</div>
+							{%endif%}
+							</p>
+							
+							
+							<style type="text/css">
+							.fa_custom {
+							color: #0099CC
+							}
+							.dislike:hover,
+							.like:hover {
+							  color: #2EBDD1;
+							  transition: all .2s ease-in-out;
+							  transform: scale(1.1);
+							}
+							</style>
+								
+								
+								
+
+								
+							</div>
 
 
 	</section>

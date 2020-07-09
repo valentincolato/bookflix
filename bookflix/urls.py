@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,re_path
 from gestion_usuario.views import home,welcome,register,login,logout,edit_profile,profile,index,change_profile_view,change_session_profile,register_profile,desactivar_perfil,historial,informe_usuario,borrar_comentario,terminar_lectura,terminar_capitulo,capitulo_terminado
 from gestion_noticia.views import news,news_especifica,trailer,trailer_especifico
-from gestion_libro.views import home_logueado,libro_especifico,libro_fav,SearchResultsView,libro_no_disponible,informe_libro,add_capitulo,edit_capitulo
+from gestion_libro.views import home_logueado,libro_especifico,libro_fav,SearchResultsView,libro_no_disponible,informe_libro,add_capitulo,edit_capitulo,dar_dislike,dar_like,borrar_puntaje
 from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
@@ -53,6 +53,11 @@ urlpatterns = [
 	path('libronodisponible', libro_no_disponible),
     path('trailer', trailer),
     path('trailer/<trailerId>', trailer_especifico),
+	path('like/<libroId>', dar_like),
+	path('dislike/<libroId>', dar_dislike),
+	path('borrarpuntaje/<libroId>', borrar_puntaje),
+
+
 ]
 urlpatterns+= staticfiles_urlpatterns()
 
