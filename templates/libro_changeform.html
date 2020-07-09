@@ -3,49 +3,55 @@
 {% block  field_sets %}
 {{ block.super }}
 <form method="POST">
-	<fieldset class="module aligned ">
 
-
-
+	{% if not libro.es_capitulado %}
 		<div class="form-row field-pdf">
-
-
+			<div style="display:flex;">
+				<label for="id_pdf">Pdf:</label>
+				{% if libro.pdf %}
+					<p class="file-upload" style="margin-left: 9rem;">Actualmente: <a
+							href="{{libro.pdf}}">{{libro.pdf}}</a>
+						<span class="clearable-file-input">
+							<input type="checkbox" name="pdf-clear" id="pdf-clear_id">
+							<label for="pdf-clear_id">Eliminar</label></span><br>
+						Modificar:
+						<input type="file" name="pdf" id="id_pdf">
+					</p>
+				{% else %}
+					<input type="file" name="pdf" id="id_pdf" style="margin-left: 9rem;">
+				{% endif %}
 		</div>
-
-		<div class="form-row field-capitulo">
-
-
+	</div>
+	{% else %}
+		<div class="form-row field-numero_de_capitulos">
 			<div>
-
-
-				<label for="id_capitulo">Capitulos:</label>
-
-				<div class="related-widget-wrapper">
-					<select name="capitulo" id="id_capitulo">
-						<option value="" selected>---------</option>
-						{% for capitulo in capitulos %}
-						<option value={{capitulo.id}}>Numero de capitulo: {{capitulo}}</option>
-						{% endfor %}
-
-
-
-					</select>
-
-					<a class="related-widget-wrapper-link change-related" id="change_id_libro"
-						data-href-template="/admin/gestion_libro/editar_capitulo/__fk__"
-						title="Modificar capitulo seleccionados/as"><img src="/static/admin/img/icon-changelink.svg"
-							alt="Modificar"></a><a class="related-widget-wrapper-link add-related" id="add_id_capitulo"
-						href="/admin/gestion_libro/agregar_capitulo/{{libro_id}}"
-						title="Agregar otro/a capitulo"><img src="/static/admin/img/icon-addlink.svg" alt="Agregar"></a>
-
-				</div>
-
-
-
+				<label class="required" for="id_numero_de_capitulos">Numero de capitulos:</label>
+				<input type="number" name="numero_de_capitulos" value="{{libro.numero_de_capitulos}}" class="vIntegerField" required="" id="id_numero_de_capitulos">
 			</div>
-
 		</div>
-
-	</fieldset>
+		<fieldset class="module aligned ">
+			<div class="form-row field-pdf">
+			</div>
+			<div class="form-row field-capitulo">
+				<div>
+					<label for="id_capitulo">Capitulos:</label>
+					<div class="related-widget-wrapper">
+						<select name="capitulo" id="id_capitulo">
+							<option value="" selected>---------</option>
+							{% for capitulo in capitulos %}
+							<option value={{capitulo.id}}>Numero de capitulo: {{capitulo}}</option>
+							{% endfor %}
+						</select>
+						<a class="related-widget-wrapper-link change-related" id="change_id_libro"
+							data-href-template="/admin/gestion_libro/editar_capitulo/__fk__"
+							title="Modificar capitulo seleccionados/as"><img src="/static/admin/img/icon-changelink.svg"
+								alt="Modificar"></a><a class="related-widget-wrapper-link add-related" id="add_id_capitulo"
+							href="/admin/gestion_libro/agregar_capitulo/{{libro_id}}"
+							title="Agregar otro/a capitulo"><img src="/static/admin/img/icon-addlink.svg" alt="Agregar"></a>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	{% endif %}
 </form>
 {% endblock %}

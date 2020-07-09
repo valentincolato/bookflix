@@ -59,7 +59,7 @@ class CapitulosLeidos(models.Model):
     perfil = models.ForeignKey(Profile, on_delete=models.CASCADE)
     numero_capitulo_leido = models.IntegerField(default=0,validators=[MinValueValidator(int('0'))])
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
-
+    capitulo = models.ForeignKey(Capitulo, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return 'de %s' % (self.perfil)
 

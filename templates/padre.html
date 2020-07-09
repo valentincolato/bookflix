@@ -67,8 +67,22 @@
   }
 </style>
 {% endif %}
-
-
+<div class="messages" style="
+                              position: absolute;
+                              z-index: 5;
+                              top: 20%;
+                              width: 95%;
+                              left: 2.5%;
+                                              ">
+  {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message | safe }}
+    </div>
+  {% endfor %}
+</div>
 
 {% block content %}
 
