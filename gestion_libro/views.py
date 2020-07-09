@@ -66,33 +66,33 @@ def libro_especifico(request, libroId):
 			comentario.libro = l
 			comentario.save()
 
-		fav = buscar_fav(request, libroId)
-		agregar_a_historial(libroId, profile_session(request))
-		if l.es_capitulado:
-			try:
-				caps = Capitulo.objects.filter(libro=l).order_by('numero_de_capitulo')
-			except ObjectDoesNotExist:
-				caps=[]
+	fav = buscar_fav(request, libroId)
+	agregar_a_historial(libroId, profile_session(request))
+	if l.es_capitulado:
+		try:
+			caps = Capitulo.objects.filter(libro=l).order_by('numero_de_capitulo')
+		except ObjectDoesNotExist:
+			caps=[]
 
-		completitud_libro = termino_libro(request, l, caps)
-		caps_terminados = completitud_libro[0]
-		termino_lectura = completitud_libro[1]
+	completitud_libro = termino_libro(request, l, caps)
+	caps_terminados = completitud_libro[0]
+	termino_lectura = completitud_libro[1]
 
-		contexto = {
-								"libro": l,
-								"favorito": fav,
-								"capitulos": caps,
-								"comentarios": Comentario.objects.filter(libro=l),
-								"form_comentario": form_comentario,
-								"termino_lectura": termino_lectura,
-								"capitulos_terminados": caps_terminados,
-								"porcentaje":porcentaje_likes(libroId),
-								"votostotales":cant_likes(libroId),
-								"trailers":Trailer.objects.filter(libro=l),
-								"disponibilidad":disponibilidad_libro(l),
-								"punt": puntuar(request, libroId, None),
+	contexto = {
+							"libro": l,
+							"favorito": fav,
+							"capitulos": caps,
+							"comentarios": Comentario.objects.filter(libro=l),
+							"form_comentario": form_comentario,
+							"termino_lectura": termino_lectura,
+							"capitulos_terminados": caps_terminados,
+							"porcentaje":porcentaje_likes(libroId),
+							"votostotales":cant_likes(libroId),
+							"trailers":Trailer.objects.filter(libro=l),
+							"disponibilidad":disponibilidad_libro(l),
+							"punt": puntuar(request, libroId, None),
 
-							}
+						}
 	return render(request, "libroDetalle.html", contexto)
 
 
