@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 import os
 from gestion_libro.models import Autor, Genero, Editorial, Libro,Capitulo
-from PyPDF2 import PdfFileMerger, PdfFileReader
+# from PyPDF2 import PdfFileMerger, PdfFileReader
 import random
 from .forms import CapituloForm
 from django.core.exceptions import ObjectDoesNotExist

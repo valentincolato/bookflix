@@ -86,4 +86,4 @@ class Puntaje(models.Model):
     perfil = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     fecha = models.DateField(auto_now=True)
-    estrellas = models.PositiveIntegerField()
+    like = models.BooleanField(default=False,null=True, blank=True)
