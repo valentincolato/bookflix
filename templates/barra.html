@@ -61,9 +61,8 @@
             
 
             <ul class="nav navbar-nav ml-auto">
-              <li class="nav-item dropdown">
-
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{request.session.nickname}}</a>
+              <li class="nav-item dropdown">        
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{request.session.nickname | truncatechars:10}}</a>
                 <div class="dropdown-menu dropdown-menu-right">
                   <a href="/profile" class="dropdown-item">Ver perfil</a>
                   <a href="/profile/edit_profile/" class="dropdown-item">Editar perfil</a>

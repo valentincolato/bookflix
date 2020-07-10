@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 import os
-from gestion_libro.models import Autor, Genero, Editorial, Libro,Capitulo
+from gestion_libro.models import Autor, Genero, Editorial, Libro, Capitulo
 # from PyPDF2 import PdfFileMerger, PdfFileReader
 import random
 from .forms import CapituloForm
@@ -18,12 +18,17 @@ class LibroAdmin(admin.ModelAdmin):
     change_form_template = "libro_changeform.html"
 
     def response_change(self, request, obj):
+        if "_es_capitulado" in request.POST:
+            obj.es_capitulado = not obj.es_capitulado
+            obj.save()
+            return HttpResponseRedirect(".")
+
         if obj.es_capitulado:
             try:
                 obj.numero_de_capitulos = request.POST['numero_de_capitulos']
             except:
                 pass
-        else :
+        else:
             try:
                 try:
                     obj.pdf = request.POST['pdf']
@@ -38,24 +43,23 @@ class LibroAdmin(admin.ModelAdmin):
         self.change_form_template = "libro_changeform.html"
         libro = context['original']
         try:
-            capitulos =Capitulo.objects.filter(libro=libro).order_by('-numero_de_capitulo')
+            capitulos = Capitulo.objects.filter(
+                libro=libro).order_by('-numero_de_capitulo')
         except ObjectDoesNotExist:
-            capitulos =[]
+            capitulos = []
 
-        extra = {'capitulos': capitulos, "libro_id":libro.id, 'libro': libro }
+        extra = {'capitulos': capitulos, 'libro': libro}
         context.update(extra)
 
-
-
         return super(LibroAdmin, self).render_change_form(request,
-                                                            context, *args, **kwargs)
+                                                          context, *args, **kwargs)
 
 
 class CapituloAdmin(admin.ModelAdmin):
-       list_display = ("numero_de_capitulo", "pdf")
+    list_display = ("numero_de_capitulo", "pdf")
 
-       def get_form(self, request, obj=None, **kwargs):
-           if obj.type == "1":
-               self.exclude = ("libro", )
-           form = super(Capitulo, self).get_form(request, obj, **kwargs)
-           return form
+    def get_form(self, request, obj=None, **kwargs):
+        if obj.type == "1":
+            self.exclude = ("libro", )
+        form = super(Capitulo, self).get_form(request, obj, **kwargs)
+        return form

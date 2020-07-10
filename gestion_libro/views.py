@@ -21,7 +21,8 @@ from tika import parser
 
 from datetime import date
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
 
 def termino_libro(request, libro ,capitulos):
 	capitulos_terminados = []
@@ -59,7 +60,12 @@ def libro_especifico(request, libroId):
 	if request.method == "POST":
 		form_comentario = CommentCreateForm(data=request.POST)
 		if form_comentario.is_valid():
-
+			#try:
+				#Leidos.objects.get(perfil=request.session['perfil'])
+				#messages.success(request, 'Acabas de comentar el libro')
+			#except:
+				#messages.warning(request, 'No podes comentar hasta terminar el libro')
+				#pass
 			comentario = form_comentario.save()
 			comentario.perfil = Profile.objects.get(
 				id=request.session['perfil'])
@@ -78,10 +84,12 @@ def libro_especifico(request, libroId):
 	caps_terminados = completitud_libro[0]
 	termino_lectura = completitud_libro[1]
 
+	capitulos = mockear_no_disponibles(l,caps)
+
 	contexto = {
 							"libro": l,
 							"favorito": fav,
-							"capitulos": caps,
+							"capitulos": capitulos,
 							"comentarios": Comentario.objects.filter(libro=l),
 							"form_comentario": form_comentario,
 							"termino_lectura": termino_lectura,
@@ -91,9 +99,25 @@ def libro_especifico(request, libroId):
 							"trailers":Trailer.objects.filter(libro=l),
 							"disponibilidad":disponibilidad_libro(l),
 							"punt": puntuar(request, libroId, None),
-
 						}
 	return render(request, "libroDetalle.html", contexto)
+
+def mockear_no_disponibles(libro,capitulos):
+	prev = 1
+	max = libro.numero_de_capitulos
+	capitulos_mockeados = []
+	for cap in capitulos:
+		for i in range(prev,cap.numero_de_capitulo):
+			capitulos_mockeados.append(None)
+		capitulos_mockeados.append(cap)
+		prev = cap.numero_de_capitulo + 1
+
+	for i in range(len(capitulos_mockeados),max):
+		capitulos_mockeados.append(None)
+
+	print(capitulos_mockeados)
+	return capitulos_mockeados
+
 
 
 def buscar_fav(request, libroId):
@@ -353,3 +377,11 @@ def edit_capitulo(request, id_capitulo):
 	context = {"form": form,  "ya_existe": ya_existe, "superaste_el_maximo":superaste_el_maximo}
 
 	return render(request, 'admin/edit_capitulo.html',context)
+
+def alerta(request,mensaje):
+	messages.warning(request,'No podes juzgar un libro por su portada termina el libro antes de '+ mensaje + '.')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def no_disponible(request,mensaje):
+	messages.error(request, f'Este {mensaje} no disponible. Puede que este {mensaje} haya sido eliminado del catalogo.')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

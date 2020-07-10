@@ -2,6 +2,9 @@
 
 {% block  field_sets %}
 {{ block.super }}
+<div class="submit-row">
+	<input type="submit" style="float:left" value="Cambiar a {% if libro.es_capitulado%} no {% endif %}capitulado" name="_es_capitulado">
+</div>
 <form method="POST">
 
 	{% if not libro.es_capitulado %}
@@ -46,7 +49,7 @@
 							data-href-template="/admin/gestion_libro/editar_capitulo/__fk__"
 							title="Modificar capitulo seleccionados/as"><img src="/static/admin/img/icon-changelink.svg"
 								alt="Modificar"></a><a class="related-widget-wrapper-link add-related" id="add_id_capitulo"
-							href="/admin/gestion_libro/agregar_capitulo/{{libro_id}}"
+							href="/admin/gestion_libro/agregar_capitulo/{{libro.id}}"
 							title="Agregar otro/a capitulo"><img src="/static/admin/img/icon-addlink.svg" alt="Agregar"></a>
 					</div>
 				</div>
