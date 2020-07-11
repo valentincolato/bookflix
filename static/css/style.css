@@ -1,18 +1,271 @@
-*
-  Theme Name: DevFolio
-  Theme URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
-  Author: BootstrapMade.com
-  License: https://bootstrapmade.com/license/
-*/
 
-/*======================================
-//--//-->   STYLES GENERALES
-======================================*/
-
-body {
-  background-color: #f5f5f5;
-  color: #4e4e4e;
+.primeraColumna {
+  margin-left: 2rem;
 }
+
+/* Comments  */
+ol {
+  list-style: none;
+}
+
+/* Editorial */
+.editorial{
+  position: absolute;
+  height: 23px;
+  left: 67px;
+  top: 120px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 28px;
+  color: #000000;
+}
+
+.portada {
+  position: absolute;
+  width: 312px;
+  height: 479px;
+  left: 59px;
+  top: 150px;
+}
+.marca {
+  position: absolute;
+  width: 676px;
+  height: 1038px;
+  left: 282px;
+  top: 204px;
+  opacity: 0.05;
+}
+
+.contenido {
+  position: absolute;
+  height: 23px;
+  left: 71px;
+  top: 644px;
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 28px;
+
+  color: #000000;
+}
+
+.genero {
+  position: absolute;
+  height: 28px;
+  left: 69px;
+  top: 671px;
+
+  font-family: Roboto;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 28px;
+
+  color: #000000;
+}
+
+/* Calificacion */
+.calificacion {
+  position: absolute;
+  width: 195px;
+  height: 57.91px;
+  left: 90px;
+  top: 768px;
+}
+.calificacion i:hover {
+  transition: all .2s ease-in-out;
+  transform: scale(1.1);
+}
+.calificacion i {
+  font-size: 2.5rem;
+}
+
+.barraPadre {
+  position: absolute;
+  width: 246px;
+  height: 14px;
+  left: 0px;
+  top: 820px;
+  background: #ECB2B2;
+}
+.barraHijo {
+  height: 14px;
+  background: #CC1414;
+}
+
+.desactivado { color: rgba(204, 20, 20, 0.2);}
+.activado { color: #CC1414}
+
+.infoPuntaje {
+  position: absolute;
+  width: 246px;
+  height: 42px;
+  left: 13px;
+  top: 830px;
+
+  font-family: Roboto;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 28px;
+  display: flex;
+  align-items: center;
+
+  color: #000000;
+}
+
+/* Dropdowns */
+.trailer {
+  position: absolute;
+  width: 294px;
+  height: 61px;
+  left: 393px;
+  top: 425px;
+}
+.lectura {
+  position: absolute;
+  width: 294px;
+  height: 61px;
+  left: 393px;
+  top: 497px;
+}
+.terminar {
+  position: absolute;
+  width: 294px;
+  height: 61px;
+  left: 393px;
+  top: 568px;
+}
+
+.trailer button,
+.lectura button,
+.terminar button {
+  width: 100%;
+  height: 61px;
+}
+
+.trailer .dropdown-item,
+.lectura .dropdown-item,
+.terminar .dropdown-item {
+  width: 294px;
+}
+
+/* Titulo */
+.titulo {
+  position: absolute;
+  height: 60px;
+  left: 396px;
+  top: 191px;
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 52px;
+  line-height: 61px;
+
+  color: #000000;
+}
+.autor {
+  position: absolute;
+  height: 28px;
+  left: 421px;
+  top: 251px;
+
+  font-family: Roboto;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 28px;
+
+  color: #000000;
+}
+
+/* Comentarios */
+.area-comentarios {
+  position: absolute;
+  width: 360px;
+  height: 425px;
+  left: 850px;
+  top: 241px;
+  padding-left: 0;
+  overflow-y: scroll;
+}
+.comentario {
+  position: absolute;
+  width: 249px;
+  height: 54px;
+  left: 890px;
+  top: 167px;
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 32px;
+  line-height: 37px;
+  color: #000000;
+}
+
+.single_comment_area {
+  max-width: 350px;
+  border-radius: 14px;
+}
+.comment-wrapper{
+  background: rgba(238, 236, 236, 0.74);
+}
+.comentarios #id_texto {
+  position: absolute;
+  width: 370px;
+  height: 101px;
+  left: 850px;
+  top: 732px;
+  padding-bottom: 4.6rem;
+  padding-left: 0.25rem;
+  background: #FFFFFF;
+  border: 1px solid #BEBEBE;
+  box-sizing: border-box;
+}
+.comentarios .enviar {
+  position: absolute;
+  width: 151px;
+  height: 40px;
+  left: 1070px;
+  top: 844px;
+}
+.comment-author {
+  text-align: center;
+  position: relative;
+  margin-top: 0.25rem;
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.comment-img {
+  max-width: 50px;
+  max-height: 50px;
+  object-fit: cover;
+  min-height: 50px;
+}
+.comment-content .fecha {
+  margin: 0em;
+}
+
+.comment-content .comment-txt {
+  margin:0.25rem 0;
+  word-break: break-word;
+}
+.borrar {
+  background: transparent;
+  border: none;
+  color: #e34242;
+  margin-left: 8rem;
+}
+
+/* Hola */
 
 h1,
 h2,
