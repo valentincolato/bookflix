@@ -317,3 +317,41 @@ def capitulo_terminado(request):
     messages.warning(request, 'Ya has terminado este capitulo.')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
+def comprobar_clave(clave):
+	try:
+		verificacion= False
+		int(clave)
+	except:
+		verificacion= len(clave)>=8
+
+	return verificacion 
+@login_required
+def change_password(request):
+
+	usuario = User.objects.get(id=request.user.id)
+	if request.method == 'POST':
+
+		if(authenticate(username=usuario, password=request.POST['old_password'])):
+
+			if comprobar_clave(request.POST['new_password1']) and request.POST['new_password1'] == request.POST['new_password2']:
+				usuario.set_password(request.POST['new_password1'])
+				usuario.save()
+				messages.error(request, 'Contraseña cambiada con exito')
+				return redirect('/logout')
+
+			elif not(request.POST['new_password1'] == request.POST['new_password2']):
+				messages.error(request, 'Las contraseñas no coinciden')
+			else:
+				print(request.POST)
+				messages.error(request, 'Las contraseñas  ingresadas no cumplen con los requisitos minimos')
+
+		else:
+			messages.error(request, 'Contraseña incorrecta')
+	
+			
+
+
+
+
+	return render(request, 'gestion_usuario/change_password.html')

@@ -270,9 +270,20 @@ class SearchResultsView(ListView):
 
 
 def cantidad_vistas(libro):
+	 
+	return int(len(Historial.objects.filter(libro=libro))) 
 
-	return int(len(Historial.objects.filter(libro=libro)))
 
+def agregar_libros_sin_visitas(libros):
+
+	if libros:
+		libros_total = libros_disponibles(Libro.objects.all())
+
+		for libro in libros_total:
+			if  not(libro in libros):
+				libros.append((libro, 0))
+
+		return libros
 
 @ staff_member_required
 def informe_libro(request):
@@ -296,10 +307,12 @@ def informe_libro(request):
 
 			libros_con_visitas = list(
 				map(lambda libro: (libro, cantidad_vistas(libro.id)), libros_ordenados))
+
+			
 		else:
 			fecha_invalida = True
 
-	return render(request, 'admin/informe_libro.html', {"libros": libros_con_visitas, "fecha_invalida":fecha_invalida})
+	return render(request, 'admin/informe_libro.html', {"libros": agregar_libros_sin_visitas(libros_con_visitas), "fecha_invalida":fecha_invalida})
 
 
 @ staff_member_required

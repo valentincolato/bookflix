@@ -15,7 +15,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path,re_path
-from gestion_usuario.views import home,welcome,register,login,logout,edit_profile,profile,index,change_profile_view,change_session_profile,register_profile,desactivar_perfil,historial,informe_usuario,borrar_comentario,terminar_lectura,terminar_capitulo,capitulo_terminado
+from gestion_usuario.views import home,welcome,register,login,logout,edit_profile,profile,index,change_profile_view,change_session_profile,register_profile,desactivar_perfil,historial,informe_usuario,borrar_comentario,terminar_lectura,terminar_capitulo,capitulo_terminado,change_password
 from gestion_noticia.views import news,news_especifica,trailer,trailer_especifico
 from gestion_libro.views import home_logueado,libro_especifico,libro_fav,SearchResultsView,libro_no_disponible,informe_libro,add_capitulo,edit_capitulo,dar_dislike,dar_like,borrar_puntaje, alerta, no_disponible
 from django.conf.urls import url
@@ -43,6 +43,7 @@ urlpatterns = [
     path('no-disponible/<mensaje>', no_disponible),
     path('change_profile/', change_profile_view),
     path('change_profile/<id>', change_session_profile),
+    path('change_password', change_password),
     path('register_profile', register_profile),
     path('historial', historial),
     path('news/', news),
