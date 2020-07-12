@@ -8,14 +8,14 @@ from django.contrib.admin import SimpleListFilter, DateFieldListFilter,FieldList
 
 # Register your models here.
 # admin.site.register(Usuario)
-# admin.site.register(Perfil)
+#admin.site.register(Perfil)
 admin.site.register(Historial)
 admin.site.register(Comentario)
 admin.site.register(Profile)
 admin.site.register(Puntaje)
 admin.site.register(Favorito)
-admin.site.register(Leidos)
-admin.site.register(CapitulosLeidos)
+#admin.site.register(Leidos)
+#admin.site.register(CapitulosLeidos)
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'date_joined', 'is_staff']

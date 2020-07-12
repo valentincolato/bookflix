@@ -9,7 +9,10 @@ Help
 
 
 {% block content %}
+<head>
 
+	<link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
 
 <img class="marca" src="../{{libro.foto}}" alt="Portada">
 <body id="page-top">
@@ -21,7 +24,7 @@ Help
 			<!-- Portada -->
 			<img class="portada" src="../{{libro.foto}}" alt="Portada">
 			<!-- Contenido -->
-			<p class="contenido"> {{libro.cant_paginas}} paginas en {{ libro.numero_de_capitulos }} capitulos </p>
+			<p class="contenido"> {{libro.cant_paginas}} paginas {% if libro.es_capitulado %}en {{ libro.numero_de_capitulos }}  capitulos {% endif %}</p>
 			<!-- Contenido -->
 			<p class="genero">
 				{% for  genero in libro.genero.all%}
@@ -33,9 +36,9 @@ Help
 			<div class="calificacion">
 					{%if punt%}
 						<a
-						href="{%if not punt.like%} /borrarpuntaje/{{libro.id}} {%endif%}"><i
+						href="{%if not punt.like%} /borrarpuntaje/{{libro.id}} {%else%} /existente {%endif%}"><i
 						class="fa fa-thumbs-down fa-3x {%if not punt.like%} activado {%else%} desactivado {%endif%}"></i></a>
-						<a href="{%if punt.like%} /borrarpuntaje/{{libro.id}} {%endif%}"><i
+						<a href="{%if punt.like%} /borrarpuntaje/{{libro.id}} {% else %} /existente {%endif%}"><i
 						class="fa fa-thumbs-up fa-3x {%if punt.like%} activado {%else%} desactivado {%endif%}"></i> </a>
 					{%else%}
 						<a href="{%if termino_lectura %}/dislike/{{libro.id}} {%else%}/alerta/calificarlo {%endif%}"><i
@@ -46,9 +49,9 @@ Help
 					<a href=/fav/{{libro.id}} class="{%if favorito%} activado {%else%} desactivado {%endif%} favorito"><i class="fas fa-star"></i></a>
 			</div>
 			<div class="barraPadre">
-				<div class="barraHijo" style="width: {{porcentaje}}%;"></div>
+				<div class="barraHijo" style="width: {{ porcentaje}}%;"></div>
 			</div>
-			<p class="infoPuntaje">Al {{porcentaje}}% le gusto el libro ({{votostotales}} votos)</p>
+			<p class="infoPuntaje">Al {{porcentaje}}% de los lectores le gusto el libro ({{votostotales}} votos)</p>
 		</div>
 	</div>
 	<div class="columna2">
@@ -69,14 +72,18 @@ Help
 			<!-- Libro -->
 			{% if disponibilidad%}
 					{% if not libro.es_capitulado  %}
-							<a class="btn btn-danger lectura"  style="padding-top: 1rem;" href="
+						<a class="btn btn-danger lectura"  style="padding-top: 1rem; {% if not libro.pdf %} background:#ECB2B2; border:none; {% endif %}" href="
 							{% if libro.pdf %} ../{{ libro.pdf }}
 							{% else %} /no-disponible/libro {%endif%}"> Comenzar a leer</a>
-						{% if not termino_lectura  %}
+						{% if not termino_lectura and libro.pdf %}
 							<div>
-								<a class="btn btn-danger terminar"
+								<a class="btn btn-danger terminar"  style="padding-top: 1rem;"
 								href="terminar_lectura/{{libro.id}}">Terminar lectura</a>
 							</div>
+						
+
+
+						
 						{% endif %}
 					{% else %}
 						{% if capitulos %}
@@ -111,14 +118,14 @@ Help
 											{% for cap in capitulos %}
 												{% if cap.id in capitulos_terminados %}
 													<a class="dropdown-item" href="capitulo_terminado"
-													tyle='text-decoration: line-through'>Capitulo
+													style='text-decoration: line-through'>Capitulo
 													{{cap.numero_de_capitulo}}</a>
 												{% else %}
 													{% if cap and cap.pdf %}
 														<a class="dropdown-item" href="terminar_capitulo/{{cap.id}}">Capitulo
 														{{cap.numero_de_capitulo}}</a>
 													{% else %}
-														<a class="dropdown-item" style="color:grey">Capitulo {{forloop.counter}}</a>
+														<a class="dropdown-item"  href="/no-disponible/capitulo"  style="color:grey">Capitulo {{forloop.counter}}</a>
 													{% endif %}
 												{% endif %}
 											{% endfor %}
@@ -129,7 +136,13 @@ Help
 						{% endif %}
 					{% endif %}
 			{%else%}
-				<h3>Lo sentimos pero este libro no se encuentra disponible</h3>
+				<h3 style="position: absolute;
+									left: 393px;
+									top: 497px;
+									width:294px;
+									white-space:normal
+									">
+									Lo sentimos pero este libro no se encuentra disponible</h3>
 			{%endif%}
 		</div>
 		<div class="columna3">
@@ -149,10 +162,11 @@ Help
 							</div>
 							<!-- Comment Content -->
 							<div class="comment-content">
-								<h5>{{comentario.perfil.nickname}}
-									{% if comentario.perfil.id == request.session.perfil %}
-										<button  class='borrar' type="reset"
-										onclick="window.location.href = 'borrar_comentario/{{comentario.id}}'"><i class="fas fa-times"></i></button>
+								
+								<h5>{{comentario.perfil.nickname }}
+									{% if comentario.perfil.id|floatformat:"0" == request.session.perfil|floatformat:"0" %}
+										<a  class='borrar' type="reset"
+										href= 'borrar_comentario/{{comentario.id}}'><i class="fas fa-times"></i></a>
 									{% endif %} </h5>
 								<p class="fecha ">{{comentario.fecha}}</p>
 								<p class="comment-txt">{{comentario.texto}}</p>

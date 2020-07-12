@@ -94,7 +94,7 @@ def libro_especifico(request, libroId):
 							"form_comentario": form_comentario,
 							"termino_lectura": termino_lectura,
 							"capitulos_terminados": caps_terminados,
-							"porcentaje":porcentaje_likes(libroId),
+							"porcentaje":int(porcentaje_likes(libroId)),
 							"votostotales":cant_likes(libroId),
 							"trailers":Trailer.objects.filter(libro=l),
 							"disponibilidad":disponibilidad_libro(l),
@@ -277,10 +277,10 @@ def cantidad_vistas(libro):
 def agregar_libros_sin_visitas(libros):
 
 	if libros:
-		libros_total = libros_disponibles(Libro.objects.all())
-
+		libros_total =Libro.objects.all()
+		solo_libros = list(map(lambda libro: libro[0], libros))
 		for libro in libros_total:
-			if  not(libro in libros):
+			if  not(libro in solo_libros):
 				libros.append((libro, 0))
 
 		return libros
@@ -392,9 +392,13 @@ def edit_capitulo(request, id_capitulo):
 	return render(request, 'admin/edit_capitulo.html',context)
 
 def alerta(request,mensaje):
-	messages.warning(request,'No podes juzgar un libro por su portada termina el libro antes de '+ mensaje + '.')
+	messages.warning(request,'No podes juzgar un libro por su portada, termina el libro antes de '+ mensaje + '.')
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def no_disponible(request,mensaje):
-	messages.error(request, f'Este {mensaje} no disponible. Puede que este {mensaje} haya sido eliminado del catalogo.')
+	messages.error(request, f'Este {mensaje} no esta disponible. Puede que este {mensaje} haya sido eliminado del catalogo o todavia no se encuentra subido.')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def existente(request):
+	messages.warning(request, 'Ya has votado, para cambiar la calificacion, previamente borre la anterior .')
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

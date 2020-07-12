@@ -105,7 +105,7 @@ ol {
   width: 246px;
   height: 42px;
   left: 13px;
-  top: 830px;
+  top: 840px;
 
   font-family: Roboto;
   font-style: italic;
@@ -262,7 +262,7 @@ ol {
   background: transparent;
   border: none;
   color: #e34242;
-  margin-left: 8rem;
+  float:right;
 }
 
 /* Hola */

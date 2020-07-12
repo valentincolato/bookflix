@@ -168,6 +168,7 @@ def edit_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            change_session_profile(request,instance_profile.id)
             return redirect('/profile')
 
         else:
@@ -261,9 +262,11 @@ def informe_usuario(request):
         fecha_fin = request.POST['fechaHasta']
         if (fecha_inicio <= fecha_fin):
             usuarios = list(filter(lambda usuario: (str(usuario.date_joined.strftime("%Y-%m-%d")) >= str(fecha_inicio)
-                                                    and (str(usuario.date_joined.strftime("%Y-%m-%d")) <= str(fecha_fin))), User.objects.all()))
+                                                    and (str(usuario.date_joined.strftime("%Y-%m-%d")) <= str(fecha_fin))), User.objects.all().order_by('-date_joined')))
+            
         else: 
-            fecha_invalida=True
+      
+            fecha_invalida= True
 
     return render(request, 'admin/informe_usuario.html', {"usuarios": usuarios, "fecha_invalida":fecha_invalida})
 

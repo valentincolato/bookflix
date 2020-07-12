@@ -4,5 +4,5 @@ from gestion_pago.models import Tarjeta
 
 
 # Register your models here.
-admin.site.register(Tarjeta)
+#admin.site.register(Tarjeta)
 

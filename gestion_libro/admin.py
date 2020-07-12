@@ -30,10 +30,12 @@ class LibroAdmin(admin.ModelAdmin):
                 pass
         else:
             try:
-                try:
-                    obj.pdf = request.POST['pdf']
-                except:
-                    obj.pdf = request.FILES['pdf']
+                if not 'pdf' in request.POST:
+                    try:
+                        obj.pdf = request.POST['pdf']
+                    except:
+                        obj.pdf = request.FILES['pdf']
+       
             except:
                 pass
         obj.save()

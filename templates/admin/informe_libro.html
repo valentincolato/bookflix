@@ -15,7 +15,7 @@
 
     {% if fecha_invalida %}
             <ul class="errorlist">
-                <li>La fecha ingresada no es valida</li>
+                <li>La fecha de inicio es posterior a la de fin</li>
             </ul>
     {% endif %}
     <form  method="POST">
@@ -39,14 +39,17 @@
                 <div class="text">Libro</div>
                 <div class="clear"></div>
             </th>
-   
 
             <th scope="col">
-                <div class="text">|</div>
+                <div class="text">Visitantes</div>
                 <div class="clear"></div>
             </th>
             <th scope="col">
-                <div class="text">Cantidad vistas</div>
+                <div class="text">Fecha de vencimiento</div>
+                <div class="clear"></div>
+            </th>
+            <th scope="col">
+                <div class="text">Editorial</div>
                 <div class="clear"></div>
             </th>
         </tr>
@@ -55,13 +58,13 @@
         {% for each in libros %}
             <tr class="model-user">
                 <th scope="row"><a href="/admin/gestion_libro/libro/{{each.0.id}}/change">{{each.0}}</a></th>
-              
-                <th scope="row"><div class="text">|</div><div class="clear"></div></th>
                 <th scope="row">{{each.1}}</th>
+                <th scope="row">{% if not each.0.fecha_vencimiento %} Sin fecha {% else %}{{each.0.fecha_vencimiento}}{% endif %}</th>
+                <th scope="row">{{each.0.editorial}}</th>
                 <td>&nbsp;</td>
             </tr>
         {% endfor %}
-    </tbody>
+    </body>
 </table>
 
 
