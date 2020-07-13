@@ -29,7 +29,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def home(request):
     if request.user.is_authenticated:
         try:
-            request.session['perfil']
+           if not request.session['perfil']:
+               create_session(request)
         except KeyError:
             create_session(request)
 
@@ -350,7 +351,7 @@ def change_password(request):
 				messages.error(request, 'Las contraseñas  ingresadas no cumplen con los requisitos minimos')
 
 		else:
-			messages.error(request, 'Contraseña incorrecta')
+			messages.error(request, 'Contraseña antigua incorrecta')
 	
 			
 

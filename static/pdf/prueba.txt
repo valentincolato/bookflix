@@ -1,0 +1,31 @@
+######Bang Yeah########
+2. BangbangYeah http://www.bangbangyeah.com/
+Al sitio actual le necesitamos agregar un about us que sea clickeando (no scrolleando, no se como se dice). Y dentro de la página principal embeber un video de dos minutos, un link a google forms y unas cuantas imagenes (idealmente tipo carrousel )
+
+Montaje de la pagina 4 paginas
+					-HOME---> Carousel de foto y video
+					-CONTACT
+					-ABOUT US
+					-LOADER
+
+*Esfuerzo calculado*
+
+-Primer dia: terminar el esqueleto de ---> -HOME
+									  ---> -CONTACT
+									  ---> -ABOUT US 
+	+5 Horas de trabajo cada uno
+
+
+-Segundo dia:  
+ 	
+ 	2 Personas revisando esqueleto de ---> CONTACT
+		+2 horas cada uno			  ---> ABOUT US
+		+3 horas revisando -HOME
+	
+	1 Persona revisa esqueleto de --->HOME
+		+5 Horas
+
+-Tercer dia:
+	
+	2 Personas -Animaciones Extra
+			   -Revision

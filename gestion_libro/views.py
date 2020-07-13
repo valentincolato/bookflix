@@ -364,9 +364,10 @@ def edit_capitulo(request, id_capitulo):
 	ya_existe=False
 
 	capitulo = Capitulo.objects.get(id=id_capitulo)
+	
 	if request.method == "POST":
-		form = CapituloForm(request.POST, request.FILES)
-
+		form = CapituloForm(request.POST, request.FILES,instance=capitulo)
+		print(request.POST)
 
 		if form.is_valid():
 			if (existe_cap(int(request.POST['numero_de_capitulo']),id_capitulo,capitulo.libro)):
@@ -374,18 +375,38 @@ def edit_capitulo(request, id_capitulo):
 			else:
 				if int(request.POST['numero_de_capitulo']) <= capitulo.libro.numero_de_capitulos:
 					form.save()
+					print(request.POST)
+					if 'pdf-clear' in request.POST:
+						if request.POST['pdf-clear'] == 'on':
+							capitulo.pdf = ''
+							print('estoy aqui')
+				
 					try:
-						capitulo.pdf = request.POST['pdf']
+					
+						try:
+							if len(request.POST['pdf'])>1:
+								capitulo.pdf = request.POST['pdf']
+						except:
+							print('hola files' + request.FILES['pdf'])
+							capitulo.pdf = request.FILES['pdf']
+			
 					except:
+						print('es aca')
 						capitulo.pdf = request.FILES['pdf']
+					
 					capitulo.numero_de_capitulo = int(request.POST['numero_de_capitulo']) 
-					capitulo.save()
+					try:
+						capitulo.save()
+					except:
+						pass
 
 					return HttpResponse('<script type="text/javascript">window.close()</script>')
 				else:
 					superaste_el_maximo =True
+				form = CapituloForm(instance=capitulo)
 	else:
 		form = CapituloForm(instance=capitulo)
+
 
 	context = {"form": form,  "ya_existe": ya_existe, "superaste_el_maximo":superaste_el_maximo}
 
